@@ -1,0 +1,5 @@
+{
+  "apiBaseUrl": "http://localhost:3000",
+  "contractAddress": "0xB8A15E0E224016565238B0f4107Edc36a5aaB8bB",
+  "usdcTokenAddress": "0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582"
+}

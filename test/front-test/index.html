@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactuar con el Contrato</title>
+</head>
+<body>
+    <button id="connectWallet">Conectar wallet</button></br></br>
+    <button id="executeAgreement">Ejecutar newAgreement</button></br></br>
+    <button id="getAgreement">Consultar acuerdo (requiere quemar clave privada)</button></br></br>
+    <button id="getAgreementByApi">Consultar acuerdo (usa api y envía firma al back-end)</button>
+    <!-- Campo de texto para ingresar el ID del acuerdo -->
+    <label for="agreementId">ID de Acuerdo:</label>
+    <input type="number" id="agreementId" min="0" step="1" placeholder="Ingresa el ID del acuerdo" required></br></br>
+    <script src="ethers.umd.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
