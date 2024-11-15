@@ -44,9 +44,11 @@ app.get('/', (req, res) => {
 
 app.get('/api/config', (req, res) => {
   res.json({
-      apiBaseUrl: process.env.API_BASE_URL,
-      contractAddress: process.env.CONTRACT_ADDRESS,
-      usdcTokenAddress: process.env.USDC_TOKEN_ADDRESS
+      contractAddress: process.env.SC_CONTRACT_ADDRESS,
+      usdcTokenAddress: process.env.USDC_TOKEN_ADDRESS,
+      apiBaseUrl: process.env.NODE_ENV === 'prod' 
+      ? process.env.API_BASE_URL_PROD 
+      : process.env.API_BASE_URL
   });
 });
 
