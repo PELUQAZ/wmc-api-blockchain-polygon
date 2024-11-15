@@ -1,19 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactuar con el Contrato</title>
+    <style>
+        /* Ajusta el ancho de los campos de wallet para que las direcciones se vean completas */
+        .wallet-input {
+            width: 100%;
+            max-width: 310px; /* Ajusta este valor según necesites */
+            font-family: monospace; /* Opcional, para mejorar la visibilidad de direcciones largas */
+        }
+    </style>
 </head>
+
 <body>
-    <button id="connectWallet">Conectar wallet</button></br></br>
-    <button id="executeAgreement">Ejecutar newAgreement</button></br></br>
+    <h3>Datos del Acuerdo</h3>
+
+    <!-- Campos adicionales -->
+    <label for="servicePayer">Wallet pagador servicio (empresa):</label>
+    <input type="text" id="servicePayer" placeholder="Dirección de wallet" class="wallet-input"><br><br>
+
+    <label for="serviceProvider">Wallet proveedor servicio (freelancer):</label>
+    <input type="text" id="serviceProvider" value="0x8789dcfCC65FaF09bFF9CE6a37188062585d1B9A" placeholder="Conecta tu wallet" readonly class="wallet-input"><br><br>
+
+    <label for="arbitrator">Wallet árbitro:</label>
+    <input type="text" id="arbitrator" value="0x0aE67cE895B26BdAb093542c8783b985a243E60C" placeholder="Dirección de wallet" class="wallet-input"><br><br>
+
+    <label for="startDate">Fecha inicio:</label>
+    <input type="date" id="startDate"><br><br>
+
+    <label for="endDate">Fecha fin:</label>
+    <input type="date" id="endDate"><br><br>
+
+    <label for="hourlyRate">Valor hora (USD):</label>
+    <input type="number" id="hourlyRate" min="0" step="0.01" value="30" placeholder="USD $"><br><br>
+
+    <label for="numHours">Nro. horas:</label>
+    <input type="number" id="numHours" min="0" step="1" value="40"><br><br>
+
+    <label for="totalAmount">Monto total (USD):</label>
+    <input type="text" id="totalAmount" readonly placeholder="USD $" value="1200"><br><br>
+
+    </br></br>
+
+    <button id="connectWallet">Conectar wallet</button>
+    <button id="executeAgreement">Crear acuerdo (fron-end)</button></br></br>
+
+    </br></br>
+    <button id="executeAgreementByApi">Crear acuerdo (API)</button></br></br>
     <button id="getAgreement">Consultar acuerdo (requiere quemar clave privada)</button></br></br>
     <button id="getAgreementByApi">Consultar acuerdo (usa api y envía firma al back-end)</button>
     <!-- Campo de texto para ingresar el ID del acuerdo -->
     <label for="agreementId">ID de Acuerdo:</label>
     <input type="number" id="agreementId" min="0" step="1" placeholder="Ingresa el ID del acuerdo" required></br></br>
+
     <script src="ethers.umd.min.js"></script>
     <script src="script.js"></script>
+
+    <!-- Script para calcular el monto total automáticamente -->
+    <script>
+        // Configura fecha actual como valor predeterminado en Fecha inicio
+        const startDateInput = document.getElementById("startDate");
+        const endDateInput = document.getElementById("endDate");
+
+        const today = new Date().toISOString().split("T")[0];
+        startDateInput.value = endDateInput.value = today;
+        startDateInput.setAttribute("min", today);
+        endDateInput.setAttribute("min", today);
+
+        // Actualiza la fecha mínima permitida en Fecha fin
+        startDateInput.addEventListener("change", () => {
+            endDateInput.setAttribute("min", startDateInput.value);
+        });
+
+        // Validación de Fecha fin para que sea mayor o igual a Fecha inicio
+        endDateInput.addEventListener("change", () => {
+            if (endDateInput.value < startDateInput.value) {
+                alert("La fecha fin debe ser mayor o igual a la fecha de inicio.");
+                endDateInput.value = "";
+            }
+        });
+
+        // Cálculo automático del monto total
+        document.getElementById("hourlyRate").addEventListener("input", calculateTotalAmount);
+        document.getElementById("numHours").addEventListener("input", calculateTotalAmount);
+
+        function calculateTotalAmount() {
+            const hourlyRate = parseFloat(document.getElementById("hourlyRate").value) || 0;
+            const numHours = parseInt(document.getElementById("numHours").value) || 0;
+            const totalAmount = hourlyRate * numHours;
+
+            document.getElementById("totalAmount").value = totalAmount.toLocaleString("en-US", { style: "currency", currency: "USD" });
+        }
+    </script>
+
 </body>
+
 </html>

@@ -50,6 +50,8 @@ async function connectWallet() {
                         // Guarda la dirección en localStorage para usarla luego
                         localStorage.setItem('userAddress', userAddress);
                         console.log(`Wallet connected: ${userAddress}`);
+                        // Muestra la dirección en el campo "Wallet proveedor servicio (freelancer)"
+                        document.getElementById("servicePayer").value = userAddress;
                     })
                 //console.log("Wallet conectada:", await signer.getAddress());
             } catch (error) {
@@ -178,15 +180,42 @@ async function executeAgreement() {
     // Instancia del contrato
     const contract = new ethers.Contract(contractAddress, contractABI, signer);
 
+    // Obtén los valores de los campos del formulario
+    const serviceProvider = document.getElementById("serviceProvider").value;
+    const servicePayer = document.getElementById("servicePayer").value;
+    const arbitrator = document.getElementById("arbitrator").value;
+    // Convierte las fechas de inicio y fin a formato UNIX timestamp
+    const startDateInput = document.getElementById("startDate").value;
+    const endDateInput = document.getElementById("endDate").value;
+    // Convierte las fechas al formato UNIX timestamp
+    const startDate = Math.floor(new Date(startDateInput).getTime() / 1000);
+    const endDate = Math.floor(new Date(endDateInput).getTime() / 1000);
+    // Obtén el valor por hora y número de horas, calcula el monto total en formato de USDC (con 6 decimales)
+    const hourlyRate = parseFloat(document.getElementById("hourlyRate").value) || 0;
+    const numHours = parseInt(document.getElementById("numHours").value) || 0;
+    const totalAmount = hourlyRate * numHours;
+    // Formatear el monto total a la cantidad de decimales para USDC (6 decimales)
+    const amount = ethers.utils.parseUnits(totalAmount.toString(), 6);
+
     // Parámetros del acuerdo (ejemplo)
-    const data = {
+    /*const data = {
         serviceProvider: "0x8789dcfCC65FaF09bFF9CE6a37188062585d1B9A",
         servicePayer: "0x31e331E751e490ef39e8B269399a76f483b2b5Af",
         arbitrator: "0x0aE67cE895B26BdAb093542c8783b985a243E60C",
-        startDate: 1730851200, //1730851200 = 2024-11-06 00:00:00 (UTC) - 1730937600 = 2024-11-07 00:00:00 (UTC)
-        endDate: 1733529600, //1733529600 = 2024-12-07 00:00:00 (UTC)
-        amount: 1000000 //ethers.utils.parseUnits("1", 6) // USDC, en este caso 1 dólar
+        startDate: 1731283200, //1730851200 = 2024-11-06 00:00:00 (UTC) - 1730937600 = 2024-11-07 00:00:00 (UTC)
+        endDate: 1731283200, //1733529600 = 2024-12-07 00:00:00 (UTC)
+        amount: 3000000 //ethers.utils.parseUnits("1", 6) // USDC, en este caso 1 dólar
+    };*/
+    const data = {
+        serviceProvider: serviceProvider,
+        servicePayer: servicePayer,
+        arbitrator: arbitrator,
+        startDate: startDate,
+        endDate: endDate,
+        amount: amount
     };
+    
+    console.log("Datos del acuerdo:", data);
 
     try {
         console.log("Aprobando la transferencia de USDC. usdcTokenAddress = ", usdcTokenAddress);
@@ -249,6 +278,89 @@ async function executeAgreement() {
     }
 }
 
+async function executeAgreementByApi() {
+    if (!signer) {
+        alert("Primero, conecta tu wallet.");
+        return;
+    }
+
+    /*if (!contractAddress || !usdcTokenAddress || !apiBaseUrl) {
+        console.error("La configuración no está cargada correctamente.");
+        return;
+    }*/
+
+    // Instancia del contrato
+    //const contract = new ethers.Contract(contractAddress, contractABI, signer);
+
+    const userAddress = localStorage.getItem('userAddress');
+
+    const serviceProvider = "0x8789dcfCC65FaF09bFF9CE6a37188062585d1B9A";
+    const servicePayer = userAddress; //"0x31e331E751e490ef39e8B269399a76f483b2b5Af"
+    const arbitrator = "0x0aE67cE895B26BdAb093542c8783b985a243E60C";
+    const startDate = 1731110400;
+    const endDate = 1735603200;
+    const amount = 5000000;
+
+    // Parámetros del acuerdo
+    const agreementData = {
+        serviceProvider: serviceProvider,
+        servicePayer: servicePayer,
+        arbitrator: arbitrator,
+        startDate: startDate, //1730851200 = 2024-11-06 00:00:00 (UTC) - 1730937600 = 2024-11-07 00:00:00 (UTC)
+        endDate: endDate, //1733529600 = 2024-12-07 00:00:00 (UTC)
+        amount: amount //ethers.utils.parseUnits("1", 6) // USDC, en este caso 1 dólar
+    };
+
+    console.log("Iniciando executeAgreementByApi");
+
+    try {
+        // Estimar gas y aprobar USDC
+        const usdcContract = new ethers.Contract(usdcTokenAddress, [
+            "function approve(address spender, uint256 amount) external returns (bool)"
+        ], signer);
+        
+        //const approveTx = await usdcContract.approve(contractAddress, agreementData.amount);
+        const approveGasEstimate = await usdcContract.estimateGas.approve(contractAddress, agreementData.amount);
+        const approveTx = await usdcContract.approve(contractAddress, agreementData.amount, {
+            gasLimit: approveGasEstimate.toNumber() + 100000, // Utiliza la estimación de gas
+            maxPriorityFeePerGas: ethers.utils.parseUnits("30", "gwei"), // Tarifa de prioridad mínima requerida
+            maxFeePerGas: ethers.utils.parseUnits("60", "gwei") // Tarifa máxima total de gas
+        });
+        await approveTx.wait();
+
+        console.log("USDC aprobado.");
+
+        // Generar el mensaje para firmar, permitiendo que el backend lo valide
+        const message = `Solicitud para crear acuerdo con ID aleatorio para el usuario ${agreementData.servicePayer}`;
+        const signature = await signer.signMessage(message);
+
+        // Llama a la API pasando la firma y la dirección
+        const response = await fetch(`${apiBaseUrl}/api/agreements`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                ...agreementData,
+                signature: signature
+            })
+        });
+
+        // Verifica si la respuesta es exitosa
+        if (!response.ok) {
+            throw new Error(`Error en la respuesta de la API: ${response.statusText}`);
+        }
+
+        // Obtiene los datos del acuerdo en formato JSON
+        const result = await response.json();
+        console.log("Acuerdo creado con éxito:", result.transactionHash);
+
+    } catch (error) {
+        console.error("Error al consultar el acuerdo:", error);
+    }
+
+}
+
 // Carga la configuración y el ABI al inicio
 (async () => {
     await loadConfig();
@@ -258,5 +370,6 @@ async function executeAgreement() {
 // Event listeners para los botones
 document.getElementById("connectWallet").addEventListener("click", connectWallet);
 document.getElementById("executeAgreement").addEventListener("click", executeAgreement);
+document.getElementById("executeAgreementByApi").addEventListener("click", executeAgreementByApi);
 document.getElementById("getAgreement").addEventListener("click", getAgreement);
 document.getElementById("getAgreementByApi").addEventListener("click", getAgreementByApi);

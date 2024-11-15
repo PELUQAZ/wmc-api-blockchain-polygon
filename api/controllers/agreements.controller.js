@@ -1,6 +1,6 @@
 // api/controllers/agreements.controller.js
 const { ethers } = require('ethers');
-const { getAgreementData } = require("../services/blockchain.service");
+const { getAgreementData, createAgreement } = require("../services/blockchain.service");
 
 //const contractABI = require('../../artifacts/contracts/WMCServiceManagement-v2.sol/WMCServiceManagement.json').abi;
 require('dotenv').config();
@@ -8,7 +8,7 @@ require('dotenv').config();
 const provider = new ethers.providers.JsonRpcProvider(process.env.NETWORK_URL);
 //console.log('PK:', process.env.PRIVATE_KEY);
 //const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
-const contractAddress = process.env.SC_CONTRACT_ADDRESS;
+//const contractAddress = process.env.SC_CONTRACT_ADDRESS;
 //const contract = new ethers.Contract(contractAddress, contractABI, wallet);
 
 async function getAgreement(req, res) {
@@ -46,28 +46,43 @@ async function getAgreement(req, res) {
   }
 }
 
-async function createAgreement(req, res) {
+async function createAgreementController(req, res) {
   try {
-    const { serviceProvider, servicePayer, arbitrator, startDate, endDate, amount } = req.body;
+    //console.log("req.body = ", req.body);
+    const { serviceProvider, servicePayer, arbitrator, startDate, endDate, amount, signature } = req.body;
 
-    const tx = await contract.newAgreement(
+    // Validar la firma del mensaje recibido
+    const message = `Solicitud para crear acuerdo con ID aleatorio para el usuario ${servicePayer}`;
+    const recoveredAddress = ethers.utils.verifyMessage(message, signature);
+    if (recoveredAddress.toLowerCase() !== servicePayer.toLowerCase()) {
+      return res.status(403).json({ error: "Firma no válida o dirección no coincide" });
+    }
+    // Crear un `signer` para el usuario conectado usando su dirección pública
+    const userSigner = provider.getSigner(servicePayer); //
+
+    console.log("recoveredAddress = ", recoveredAddress);
+    console.log("servicePayer = ", servicePayer);
+
+    // Crear el acuerdo en la blockchain
+    const transactionHash = await createAgreement({
       serviceProvider,
       servicePayer,
       arbitrator,
       startDate,
       endDate,
-      ethers.utils.parseUnits(amount.toString(), 6)
-    );
+      amount
+    }, userSigner);
 
-    await tx.wait();
-    res.json({ message: 'Acuerdo creado exitosamente', transactionHash: tx.hash });
+    res.json({ transactionHash });
+    //res.status(201).json({ message: "Acuerdo creado exitosamente", transactionHash: result.transactionHash });
+
   } catch (error) {
-    console.error('Error al crear el acuerdo:', error);
+    console.error('Error al crear el acuerdo en createAgreementController:', error);
     res.status(500).json({ error: 'Error al crear el acuerdo' });
   }
 }
 
 module.exports = {
   getAgreement,
-  createAgreement
+  createAgreementController
 };
