@@ -3,11 +3,29 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
+const helmet = require('helmet');
 
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
+
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        frameAncestors: ["'self'", "https://*.myshopify.com"],
+      },
+    },
+  })
+);
+
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'https://workmarketcap.myshopify.com'); // Reemplaza con el dominio de tu tienda
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE'); // Métodos que permites
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Cabeceras que permites
+  next();
+});
 
 app.use(cors());
 app.use(express.json());
