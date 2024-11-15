@@ -25,7 +25,6 @@ async function loadConfig() {
         contractAddress = process.env.SC_CONTRACT_ADDRESS; //config.contractAddress;
         usdcTokenAddress = process.env.USDC_TOKEN_ADDRESS; //config.usdcTokenAddress;
         apiBaseUrl = process.env.API_BASE_URL; //config.apiBaseUrl;
-        //console.log("Configuración cargada correctamente:", config);
     } catch (error) {
         console.error("Error al cargar config.json:", error);
     }

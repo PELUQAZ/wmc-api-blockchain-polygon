@@ -42,6 +42,14 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../test/front-test/index.html'));
 });
 
+app.get('/api/config', (req, res) => {
+  res.json({
+      apiBaseUrl: process.env.API_BASE_URL,
+      contractAddress: process.env.CONTRACT_ADDRESS,
+      usdcTokenAddress: process.env.USDC_TOKEN_ADDRESS
+  });
+});
+
 app.listen(port, () => {
   console.log(`API running on http://localhost:${port}`);
 });
