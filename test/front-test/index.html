@@ -46,11 +46,11 @@
     </br></br>
 
     <button id="connectWallet">Conectar wallet</button>
-    <button id="executeAgreement">Crear acuerdo (fron-end)</button></br></br>
+    <button id="executeAgreement">Crear acuerdo</button></br></br>
 
     </br></br>
-    <button id="executeAgreementByApi">Crear acuerdo (API)</button></br></br>
-    <button id="getAgreement">Consultar acuerdo (requiere quemar clave privada)</button></br></br>
+    <!-- <button id="executeAgreementByApi">Crear acuerdo (API)</button></br></br> -->
+    <!-- <button id="getAgreement">Consultar acuerdo (requiere quemar clave privada)</button></br></br> -->
     <button id="getAgreementByApi">Consultar acuerdo (usa api y envía firma al back-end)</button>
     <!-- Campo de texto para ingresar el ID del acuerdo -->
     <label for="agreementId">ID de Acuerdo:</label>
@@ -58,43 +58,7 @@
 
     <script src="ethers.umd.min.js"></script>
     <script src="script.js"></script>
-
-    <!-- Script para calcular el monto total automáticamente -->
-    <script>
-        // Configura fecha actual como valor predeterminado en Fecha inicio
-        const startDateInput = document.getElementById("startDate");
-        const endDateInput = document.getElementById("endDate");
-
-        const today = new Date().toISOString().split("T")[0];
-        startDateInput.value = endDateInput.value = today;
-        startDateInput.setAttribute("min", today);
-        endDateInput.setAttribute("min", today);
-
-        // Actualiza la fecha mínima permitida en Fecha fin
-        startDateInput.addEventListener("change", () => {
-            endDateInput.setAttribute("min", startDateInput.value);
-        });
-
-        // Validación de Fecha fin para que sea mayor o igual a Fecha inicio
-        endDateInput.addEventListener("change", () => {
-            if (endDateInput.value < startDateInput.value) {
-                alert("La fecha fin debe ser mayor o igual a la fecha de inicio.");
-                endDateInput.value = "";
-            }
-        });
-
-        // Cálculo automático del monto total
-        document.getElementById("hourlyRate").addEventListener("input", calculateTotalAmount);
-        document.getElementById("numHours").addEventListener("input", calculateTotalAmount);
-
-        function calculateTotalAmount() {
-            const hourlyRate = parseFloat(document.getElementById("hourlyRate").value) || 0;
-            const numHours = parseInt(document.getElementById("numHours").value) || 0;
-            const totalAmount = hourlyRate * numHours;
-
-            document.getElementById("totalAmount").value = totalAmount.toLocaleString("en-US", { style: "currency", currency: "USD" });
-        }
-    </script>
+    <script src="calculation.js"></script>
 
 </body>
 

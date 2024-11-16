@@ -21,8 +21,8 @@ async function loadABI() {
 // Carga la configuración desde config.json
 async function loadConfig() {
     try {
-        console.log("Cargando config... window.location.hostname = ", window.location.hostname);
-        console.log("window.location.origin = ", window.location.origin);
+        //console.log("Cargando config... window.location.hostname = ", window.location.hostname);
+        //console.log("window.location.origin = ", window.location.origin);
         //const response = await fetch("config.json");
         //const config = await response.json();
 
@@ -37,7 +37,7 @@ async function loadConfig() {
         contractAddress = config.contractAddress;
         usdcTokenAddress = config.usdcTokenAddress;
         apiBaseUrl = config.apiBaseUrl;
-        console.log("contractAddress - usdcTokenAddress - apiBaseUrl", contractAddress + " - " + usdcTokenAddress + " - " + apiBaseUrl);
+        //console.log("contractAddress - usdcTokenAddress - apiBaseUrl", contractAddress + " - " + usdcTokenAddress + " - " + apiBaseUrl);
     } catch (error) {
         console.error("Error al cargar config.json:", error);
     }
