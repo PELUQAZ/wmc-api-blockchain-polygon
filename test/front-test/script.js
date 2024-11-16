@@ -8,7 +8,8 @@ let apiBaseUrl; // = window.location.hostname === 'localhost' ? 'http://localhos
 // Carga el ABI dinámicamente desde el archivo generado por Hardhat
 async function loadABI() {
     try {
-        const response = await fetch("../../artifacts/contracts/WMCServiceManagement-v2.sol/WMCServiceManagement.json");
+        //const response = await fetch("../../artifacts/contracts/WMCServiceManagement-v2.sol/WMCServiceManagement.json");
+        const response = await fetch("/WMCServiceManagement.json");
         const contractJson = await response.json();
         contractABI = contractJson.abi;
         //console.log("ABI cargado correctamente:", contractABI);
