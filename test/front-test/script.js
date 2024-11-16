@@ -3,13 +3,13 @@ let contractAddress;
 let usdcTokenAddress;
 let contractABI;
 let signer;
-let apiBaseUrl; // = window.location.hostname === 'localhost' ? 'http://localhost:3000' : 'https://wmc-agreements-app-hncub6e4edcphph5.canadacentral-01.azurewebsites.net';
+let apiBaseUrl; // = window.location.hostname === '127.0.0.1' ? 'http://localhost:3000' : 'https://wmc-agreements-app-hncub6e4edcphph5.canadacentral-01.azurewebsites.net';
 
 // Carga el ABI dinámicamente desde el archivo generado por Hardhat
 async function loadABI() {
     try {
         //const response = await fetch("../../artifacts/contracts/WMCServiceManagement-v2.sol/WMCServiceManagement.json");
-        const response = await fetch("/WMCServiceManagement.json");
+        const response = await fetch("WMCServiceManagement.json");
         const contractJson = await response.json();
         contractABI = contractJson.abi;
         //console.log("ABI cargado correctamente:", contractABI);
@@ -21,11 +21,14 @@ async function loadABI() {
 // Carga la configuración desde config.json
 async function loadConfig() {
     try {
+        console.log("Cargando config... window.location.hostname = ", window.location.hostname);
+        console.log("window.location.origin = ", window.location.origin);
         //const response = await fetch("config.json");
         //const config = await response.json();
 
         // Detecta el entorno actual y construye la URL base
-        const baseUrl = "https://wmc-agreements-app-hncub6e4edcphph5.canadacentral-01.azurewebsites.net"; //window.location.origin;
+        const baseUrl = window.location.hostname === '127.0.0.1' ? 
+            'http://localhost:3000' : window.location.origin
         //const response = await fetch("/api/config");
         //const response = await fetch("http://localhost:3000/api/config");
         const response = await fetch(`${baseUrl}/api/config`);
@@ -34,7 +37,7 @@ async function loadConfig() {
         contractAddress = config.contractAddress;
         usdcTokenAddress = config.usdcTokenAddress;
         apiBaseUrl = config.apiBaseUrl;
-        //console.log("contractAddress - usdcTokenAddress - apiBaseUrl", contractAddress + " - " + usdcTokenAddress + " - " + apiBaseUrl);
+        console.log("contractAddress - usdcTokenAddress - apiBaseUrl", contractAddress + " - " + usdcTokenAddress + " - " + apiBaseUrl);
     } catch (error) {
         console.error("Error al cargar config.json:", error);
     }
