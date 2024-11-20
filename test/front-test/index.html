@@ -12,6 +12,11 @@
             max-width: 310px; /* Ajusta este valor según necesites */
             font-family: monospace; /* Opcional, para mejorar la visibilidad de direcciones largas */
         }
+        .fee-input {
+            width: 100%;
+            max-width: 50px; /* Ajusta este valor según necesites */
+            font-family: monospace; /* Opcional, para mejorar la visibilidad de direcciones largas */
+        }
     </style>
 </head>
 
@@ -34,14 +39,20 @@
     <label for="endDate">Fecha fin:</label>
     <input type="date" id="endDate"><br><br>
 
-    <label for="hourlyRate">Valor hora (USD):</label>
+    <label for="hourlyRate">Valor hora (USDC):</label>
     <input type="number" id="hourlyRate" min="0" step="0.01" value="30" placeholder="USD $"><br><br>
 
     <label for="numHours">Nro. horas:</label>
     <input type="number" id="numHours" min="0" step="1" value="40"><br><br>
 
-    <label for="totalAmount">Monto total (USD):</label>
+    <label for="totalAmount">Monto total (USDC):</label>
     <input type="text" id="totalAmount" readonly placeholder="USD $" value="1200"><br><br>
+
+    <label for="totalAmount">Fee de arbitraje (USDC):</label>
+    <input type="text" id="arbitrateFee" readonly placeholder="USD $" value="1" class="fee-input"><br><br>
+
+    <label for="totalAmount">Fee DAO (USDC):</label>
+    <input type="text" id="daoFee" readonly placeholder="USD $" value="1.5" class="fee-input"><br><br>
 
     </br></br>
 
@@ -51,10 +62,15 @@
     </br></br>
     <!-- <button id="executeAgreementByApi">Crear acuerdo (API)</button></br></br> -->
     <!-- <button id="getAgreement">Consultar acuerdo (requiere quemar clave privada)</button></br></br> -->
-    <button id="getAgreementByApi">Consultar acuerdo (usa api y envía firma al back-end)</button>
+    
     <!-- Campo de texto para ingresar el ID del acuerdo -->
-    <label for="agreementId">ID de Acuerdo:</label>
-    <input type="number" id="agreementId" min="0" step="1" placeholder="Ingresa el ID del acuerdo" required></br></br>
+    <label for="agreementId">Id acuerdo:</label>
+    <input type="number" id="agreementId" min="0" step="1" placeholder="Ingresa el ID del acuerdo" required>
+    <button id="getAgreementByApi">Consultar acuerdo</button></br></br></br>
+
+    </br></br>
+    <button id="disagreement">Desacuerdo</button>
+    <button id="resolveDisagreement">Resolver desacuerdo</button>
 
     <script src="ethers.umd.min.js"></script>
     <script src="script.js"></script>

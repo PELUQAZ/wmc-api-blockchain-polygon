@@ -9,7 +9,7 @@ let apiBaseUrl; // = window.location.hostname === '127.0.0.1' ? 'http://localhos
 async function loadABI() {
     try {
         //const response = await fetch("../../artifacts/contracts/WMCServiceManagement-v2.sol/WMCServiceManagement.json");
-        const response = await fetch("WMCServiceManagement.json");
+        const response = await fetch("WMCAgreementManagement.json"); //WMCServiceManagement.json
         const contractJson = await response.json();
         contractABI = contractJson.abi;
         //console.log("ABI cargado correctamente:", contractABI);
@@ -205,7 +205,10 @@ async function executeAgreement() {
     // Obtén el valor por hora y número de horas, calcula el monto total en formato de USDC (con 6 decimales)
     const hourlyRate = parseFloat(document.getElementById("hourlyRate").value) || 0;
     const numHours = parseInt(document.getElementById("numHours").value) || 0;
-    const totalAmount = hourlyRate * numHours;
+    const arbitrateFee = parseFloat(document.getElementById("arbitrateFee").value) || 0;
+    const daoFee = parseFloat(document.getElementById("daoFee").value) || 0;
+    const totalAmount = (hourlyRate * numHours) + arbitrateFee + daoFee;
+    console.log("totalAmount = ", totalAmount);
     // Formatear el monto total a la cantidad de decimales para USDC (6 decimales)
     const amount = ethers.utils.parseUnits(totalAmount.toString(), 6);
 
@@ -227,7 +230,7 @@ async function executeAgreement() {
         amount: amount
     };
     
-    console.log("Datos del acuerdo:", data);
+    console.log("Datos acuerdo:", data);
 
     try {
         console.log("Aprobando la transferencia de USDC. usdcTokenAddress = ", usdcTokenAddress);
@@ -237,8 +240,9 @@ async function executeAgreement() {
             "function approve(address spender, uint256 amount) external returns (bool)"
         ], signer);
 
-        console.log("Inicia tx. Estimando gas para transacción de aprobación... amount = ", data.amount);
+        console.log("Inicia tx aprobación. Estimando gas para transacción de aprobación... amount = ", data.amount);
         const approveGasEstimate = await usdcContract.estimateGas.approve(contractAddress, data.amount);
+        console.log("Estima ok. contractAddress = " + contractAddress);
         // Ejecuta la transacción usando la estimación de gas
         const approveTx = await usdcContract.approve(contractAddress, data.amount, {
             gasLimit: approveGasEstimate.toNumber() + 100000, // Utiliza la estimación de gas
@@ -246,11 +250,11 @@ async function executeAgreement() {
             maxFeePerGas: ethers.utils.parseUnits("60", "gwei") // Tarifa máxima total de gas
         });
 
-        console.log("Continua tx...");
+        console.log("Continua tx aprobación...");
         await approveTx.wait();
         console.log("Transferencia aprobada.");
 
-        console.log("Estimando gas para transacción de nuevo acuerdo...");
+        console.log("Estimando gas transacción crear acuerdo...");
         const agreementGasEstimate = await contract.estimateGas.newAgreement(
             data.serviceProvider,
             data.servicePayer,
@@ -382,6 +386,6 @@ async function executeAgreementByApi() {
 // Event listeners para los botones
 document.getElementById("connectWallet").addEventListener("click", connectWallet);
 document.getElementById("executeAgreement").addEventListener("click", executeAgreement);
-document.getElementById("executeAgreementByApi").addEventListener("click", executeAgreementByApi);
-document.getElementById("getAgreement").addEventListener("click", getAgreement);
+//document.getElementById("executeAgreementByApi").addEventListener("click", executeAgreementByApi);
+//document.getElementById("getAgreement").addEventListener("click", getAgreement);
 document.getElementById("getAgreementByApi").addEventListener("click", getAgreementByApi);

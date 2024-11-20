@@ -1,7 +1,7 @@
 // api/services/blockchain.service.js
 
 const ethers = require("ethers");
-const contractABI = require("../../artifacts/contracts/WMCServiceManagement-v2.sol/WMCServiceManagement.json").abi;
+const contractABI = require("../../artifacts/contracts/WMCAgreementManagement.sol/WMCAgreementManagement.json").abi;
 const provider = new ethers.providers.JsonRpcProvider(process.env.NETWORK_URL);
 const contractAddress = process.env.SC_CONTRACT_ADDRESS;
 const usdcTokenAddress = process.env.USDC_TOKEN_ADDRESS;
