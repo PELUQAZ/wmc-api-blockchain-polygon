@@ -208,7 +208,7 @@ async function executeAgreement() {
     const arbitrateFee = parseFloat(document.getElementById("arbitrateFee").value) || 0;
     const daoFee = parseFloat(document.getElementById("daoFee").value) || 0;
     const totalAmount = (hourlyRate * numHours) + arbitrateFee + daoFee;
-    console.log("totalAmount = ", totalAmount);
+
     // Formatear el monto total a la cantidad de decimales para USDC (6 decimales)
     const amount = ethers.utils.parseUnits(totalAmount.toString(), 6);
 
