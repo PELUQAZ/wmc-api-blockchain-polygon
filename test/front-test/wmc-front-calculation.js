@@ -29,5 +29,5 @@ function calculateTotalAmount() {
     const numHours = parseInt(document.getElementById("numHours").value) || 0;
     const totalAmount = hourlyRate * numHours;
 
-    document.getElementById("totalAmount").value = totalAmount.toLocaleString("en-US", { style: "currency", currency: "USD" });
+    document.getElementById("agreementAmount").value = totalAmount.toLocaleString("en-US", { style: "currency", currency: "USD" });
 }

@@ -16,6 +16,9 @@ async function getAgreement(req, res) {
     const { userAddress, signature } = req.body;
     const { id } = req.params;
 
+    console.log("userAddress = ", userAddress);
+    console.log("id = ", id);
+
     // Mensaje original usado en el front-end
     const message = `Consulta de acuerdo ${id} para el usuario ${userAddress}`;
     // Recupera la dirección de la firma

@@ -77,7 +77,7 @@ async function connectWallet() {
 }
 
 // Función para consultar el acuerdo
-/*async function getAgreement() {
+async function getAgreement() {
     if (!signer) {
         alert("Primero, conecta tu wallet.");
         return;
@@ -91,14 +91,11 @@ async function connectWallet() {
     // Instancia del contrato
     const contract = new ethers.Contract(contractAddress, contractABI, signer);
 
-    // ID del acuerdo que deseas consultar (por ejemplo, 0)
-    const agreementId = 0;
+    // ID del acuerdo que deseas consultar
+    const agreementId = document.getElementById("agreementId").value;
 
     try {
-        console.log("Consultando el acuerdo con ID:", agreementId);
-
         const agreement = await contract.agreements(agreementId);
-
         // Desglosa los datos obtenidos del acuerdo
         console.log("Datos del acuerdo:");
         console.log("Service Provider:", agreement.serviceProvider);
@@ -113,9 +110,9 @@ async function connectWallet() {
     } catch (error) {
         console.error("Error al consultar el acuerdo:", error);
     }
-}*/
+}
 
-// Función para consultar el acuerdo a través de la API
+/*// Función para consultar el acuerdo a través de la API
 async function getAgreementByApi() {
     //console.log("signer = ", signer);
     if (!signer) {
@@ -175,7 +172,7 @@ async function getAgreementByApi() {
     } catch (error) {
         console.error("Error al consultar el acuerdo:", error);
     }
-}
+}*/
 
 // Función para ejecutar newAgreement a través de Metamask
 async function executeAgreement() {
@@ -294,16 +291,16 @@ async function executeAgreement() {
     }
 }
 
-async function executeAgreementByApi() {
+/*async function executeAgreementByApi() {
     if (!signer) {
         alert("Primero, conecta tu wallet.");
         return;
     }
 
-    /*if (!contractAddress || !usdcTokenAddress || !apiBaseUrl) {
-        console.error("La configuración no está cargada correctamente.");
-        return;
-    }*/
+    //if (!contractAddress || !usdcTokenAddress || !apiBaseUrl) {
+    //    console.error("La configuración no está cargada correctamente.");
+    //    return;
+    //}
 
     // Instancia del contrato
     //const contract = new ethers.Contract(contractAddress, contractABI, signer);
@@ -375,7 +372,7 @@ async function executeAgreementByApi() {
         console.error("Error al consultar el acuerdo:", error);
     }
 
-}
+}*/
 
 // Carga la configuración y el ABI al inicio
 (async () => {
@@ -387,5 +384,5 @@ async function executeAgreementByApi() {
 document.getElementById("connectWallet").addEventListener("click", connectWallet);
 document.getElementById("executeAgreement").addEventListener("click", executeAgreement);
 //document.getElementById("executeAgreementByApi").addEventListener("click", executeAgreementByApi);
-//document.getElementById("getAgreement").addEventListener("click", getAgreement);
-document.getElementById("getAgreementByApi").addEventListener("click", getAgreementByApi);
+document.getElementById("getAgreement").addEventListener("click", getAgreement);
+//document.getElementById("getAgreementByApi").addEventListener("click", getAgreementByApi);
