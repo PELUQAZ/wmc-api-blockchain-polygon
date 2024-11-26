@@ -34,7 +34,7 @@ contract WMCAgreementManagement {
     Agreement[] public agreements;        // Lista de acuerdos
     address[] public validArbiters;       // Lista de árbitros válidos
     address public daoTreasury = 0xAC9Adcccd19Ea5A05e5A5A5F37C8c02dd9a2ce9C; // Dirección del tesoro DAO
-    uint256 private constant FEE_ARBITRATION = 10.5 * 10 ** 6; // USDC $1.5
+    uint256 private constant FEE_ARBITRATION = 1.5 * 10 ** 6; // USDC $1.5
     uint256 private constant FEE_DAO = 1 * 10 ** 6; // USDC $1
     uint constant DAY_IN_SECONDS = 86400; // Duración de un día en segundos
     address public constant AGREEMENTS_PAYER = 0x56d30aE87F2Ab68f3c0d8125baD517774C79c64C;
@@ -43,9 +43,9 @@ contract WMCAgreementManagement {
     /// @param _usdcTokenAddress Dirección del token USDC.
     constructor(address _usdcTokenAddress) {
         usdcToken = IERC20(_usdcTokenAddress);
-        validArbiters.push(0x0aE67cE895B26BdAb093542c8783b985a243E60C);
-        validArbiters.push(0x1bD61554e343F88F23a094cCB22D83031B3F0adb);
-        validArbiters.push(0xB0eA724275BeA77959622B58E97A9d26D4B44Ea2);
+        validArbiters.push(0x31e331E751e490ef39e8B269399a76f483b2b5Af); //LVM  //0x0aE67cE895B26BdAb093542c8783b985a243E60C
+        validArbiters.push(0x3069EBaEcA68b5f5E113e0d4Fc3155Bd0Bf4926B); //JFM  //0x1bD61554e343F88F23a094cCB22D83031B3F0adb
+        validArbiters.push(0x6c83C41cc7226AFb36ee66814cAbb952c9E89EC7); //JV   //0xB0eA724275BeA77959622B58E97A9d26D4B44Ea2
     }
 
     /// @notice Normaliza un timestamp a la medianoche.
