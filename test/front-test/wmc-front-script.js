@@ -9,9 +9,11 @@ let apiBaseUrl; // = window.location.hostname === '127.0.0.1' ? 'http://localhos
 async function loadABI() {
     try {
         //const response = await fetch("../../artifacts/contracts/WMCServiceManagement-v2.sol/WMCServiceManagement.json");
-        const response = await fetch("WMCAgreementManagement.json"); //WMCServiceManagement.json
+        const response = await fetch("abis/WMCAgreementManagement.json"); //WMCServiceManagement.json
+
         const contractJson = await response.json();
         contractABI = contractJson.abi;
+        console.log("contractABI = ", contractABI);
         //console.log("ABI cargado correctamente:", contractABI);
     } catch (error) {
         console.error("Error al cargar el ABI:", error);
@@ -112,70 +114,8 @@ async function getAgreement() {
     }
 }
 
-/*// Función para consultar el acuerdo a través de la API
-async function getAgreementByApi() {
-    //console.log("signer = ", signer);
-    if (!signer) {
-        alert("Primero, conecta tu wallet.");
-        return;
-    }
-
-    //const agreementId = 0; // El ID del acuerdo que quieres consultar
-    // Obtiene el valor del ID de acuerdo del campo de texto
-    const agreementIdInput = document.getElementById("agreementId").value;
-    const agreementId = parseInt(agreementIdInput, 10); // Asegura que sea un número entero
-    if (isNaN(agreementId) || agreementId < 0) {
-        alert("Favor ingresa un ID de acuerdo válido (entero mayor o igual a cero).");
-        return;
-    }
-
-    const userAddress = localStorage.getItem('userAddress');
-    const message = `Consulta de acuerdo ${agreementId} para el usuario ${userAddress}`;
-
-    console.log("Iniciando getAgreementByApi");
-    try {
-        // Firma el mensaje
-        const signature = await signer.signMessage(message);
-        //console.log("Firma del mensaje:", signature);
-
-        // Llama a la API pasando la firma y la dirección
-        const response = await fetch(`${apiBaseUrl}/api/agreements/${agreementId}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                userAddress: userAddress,
-                signature: signature
-            })
-        });
-
-        // Verifica si la respuesta es exitosa
-        if (!response.ok) {
-            throw new Error(`Error en la respuesta de la API: ${response.statusText}`);
-        }
-
-        // Obtiene los datos del acuerdo en formato JSON
-        const agreement = await response.json();
-
-        // Desglosa los datos obtenidos del acuerdo
-        console.log("Datos del acuerdo:");
-        console.log("Service Provider:", agreement.serviceProvider);
-        console.log("Service Payer:", agreement.servicePayer);
-        console.log("Arbitrator:", agreement.arbitrator);
-        console.log("Start Date:", agreement.startDate);
-        console.log("End Date:", agreement.endDate);
-        console.log("Amount:", agreement.amount);
-        console.log("Estado:", agreement.estado);
-        console.log("SPA Agree:", agreement.spaAgree);
-        console.log("SPR Agree:", agreement.sprAgree);
-    } catch (error) {
-        console.error("Error al consultar el acuerdo:", error);
-    }
-}*/
-
-// Función para ejecutar newAgreement a través de Metamask
-async function executeAgreement() {
+// Función para ejecutar creategreement a través de Metamask
+async function createAgreement() {
     if (!signer) {
         alert("Primero, conecta tu wallet.");
         return;
@@ -291,7 +231,128 @@ async function executeAgreement() {
     }
 }
 
-/*async function executeAgreementByApi() {
+async function payAgreement() {
+    if (!signer) {
+        alert("Primero, conecta tu wallet.");
+        return;
+    }
+
+    if (!contractAddress || !contractABI) {
+        console.error("La configuración o el ABI no están cargados correctamente.");
+        return;
+    }
+    console.log("Iniciando pagos");
+    // Instancia del contrato
+    const contract = new ethers.Contract(contractAddress, contractABI, signer);
+
+    // ID del acuerdo que deseas consultar
+    const agreementId = document.getElementById("agreementId").value;
+    const agreementIds = [agreementId];
+    console.log("Iniciando estimación de gas");
+    try {
+        const gasEstimate = await contract.estimateGas.processAgreementsBatch(agreementIds);
+        console.log("Gas estimado. Iniciando pagos.");
+        const tx = await contract.processAgreementsBatch(
+            agreementIds,
+            {
+                gasLimit: gasEstimate.toNumber() + 100000, // 29000000 Ajusta según sea necesario
+                maxPriorityFeePerGas: ethers.utils.parseUnits("30", "gwei"), // Tarifa de prioridad mínima requerida
+                maxFeePerGas: ethers.utils.parseUnits("60", "gwei") // Tarifa máxima total de gas
+            });
+        console.log("Acuerdo pagado - tx.hash = ", tx);
+    } catch (error) {
+        console.error("Error al pagar acuerdo:", error);
+    }
+}
+
+/*// Función para consultar el acuerdo a través de la API
+async function getAgreementByApi() {
+    //console.log("signer = ", signer);
+    if (!signer) {
+        alert("Primero, conecta tu wallet.");
+        return;
+    }
+
+    //const agreementId = 0; // El ID del acuerdo que quieres consultar
+    // Obtiene el valor del ID de acuerdo del campo de texto
+    const agreementIdInput = document.getElementById("agreementId").value;
+    const agreementId = parseInt(agreementIdInput, 10); // Asegura que sea un número entero
+    if (isNaN(agreementId) || agreementId < 0) {
+        alert("Favor ingresa un ID de acuerdo válido (entero mayor o igual a cero).");
+        return;
+    }
+
+    const userAddress = localStorage.getItem('userAddress');
+    const message = `Consulta de acuerdo ${agreementId} para el usuario ${userAddress}`;
+
+    console.log("Iniciando getAgreementByApi");
+    try {
+        // Firma el mensaje
+        const signature = await signer.signMessage(message);
+        //console.log("Firma del mensaje:", signature);
+
+        // Llama a la API pasando la firma y la dirección
+        const response = await fetch(`${apiBaseUrl}/api/agreements/${agreementId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                userAddress: userAddress,
+                signature: signature
+            })
+        });
+
+        // Verifica si la respuesta es exitosa
+        if (!response.ok) {
+            throw new Error(`Error en la respuesta de la API: ${response.statusText}`);
+        }
+
+        // Obtiene los datos del acuerdo en formato JSON
+        const agreement = await response.json();
+
+        // Desglosa los datos obtenidos del acuerdo
+        console.log("Datos del acuerdo:");
+        console.log("Service Provider:", agreement.serviceProvider);
+        console.log("Service Payer:", agreement.servicePayer);
+        console.log("Arbitrator:", agreement.arbitrator);
+        console.log("Start Date:", agreement.startDate);
+        console.log("End Date:", agreement.endDate);
+        console.log("Amount:", agreement.amount);
+        console.log("Estado:", agreement.estado);
+        console.log("SPA Agree:", agreement.spaAgree);
+        console.log("SPR Agree:", agreement.sprAgree);
+    } catch (error) {
+        console.error("Error al consultar el acuerdo:", error);
+    }
+}*/
+
+/*async function updateState() {
+    if (!signer) {
+        alert("Primero, conecta tu wallet.");
+        return;
+    }
+
+    if (!contractAddress || !contractABI) {
+        console.error("La configuración o el ABI no están cargados correctamente.");
+        return;
+    }
+
+    // Instancia del contrato
+    const contract = new ethers.Contract(contractAddress, contractABI, signer);
+
+    // ID del acuerdo que deseas consultar
+    const agreementId = document.getElementById("agreementId").value;
+
+    try {
+        const stateUpdated = await contract.updateState(agreementId);
+        console.log("Estado actualizado - stateUpdated = ", stateUpdated);
+    } catch (error) {
+        console.error("Error al actualizar estado del acuerdo:", error);
+    }
+}*/
+
+/*async function createAgreementByApi() {
     if (!signer) {
         alert("Primero, conecta tu wallet.");
         return;
@@ -324,7 +385,7 @@ async function executeAgreement() {
         amount: amount //ethers.utils.parseUnits("1", 6) // USDC, en este caso 1 dólar
     };
 
-    console.log("Iniciando executeAgreementByApi");
+    console.log("Iniciando createAgreementByApi");
 
     try {
         // Estimar gas y aprobar USDC
@@ -382,7 +443,9 @@ async function executeAgreement() {
 
 // Event listeners para los botones
 document.getElementById("connectWallet").addEventListener("click", connectWallet);
-document.getElementById("executeAgreement").addEventListener("click", executeAgreement);
-//document.getElementById("executeAgreementByApi").addEventListener("click", executeAgreementByApi);
+document.getElementById("createAgreement").addEventListener("click", createAgreement);
+//document.getElementById("createAgreementByApi").addEventListener("click", createAgreementByApi);
 document.getElementById("getAgreement").addEventListener("click", getAgreement);
 //document.getElementById("getAgreementByApi").addEventListener("click", getAgreementByApi);
+document.getElementById("updateState").addEventListener("click", updateState);
+document.getElementById("payAgreement").addEventListener("click", payAgreement);
