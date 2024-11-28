@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactuar con el Contrato</title>
-    <link rel="stylesheet" href="https://workmarketcap.myshopify.com/cdn/shop/t/5/assets/app.css">
+    <!--<link rel="stylesheet" href="https://workmarketcap.myshopify.com/cdn/shop/t/5/assets/app.css">-->
     <style>
         /* Ajusta el ancho de los campos de wallet para que las direcciones se vean completas */
         .wallet-input {
@@ -28,68 +28,65 @@
 
 <body>
 
-    <div class="form-container">
-        <h3>Datos del Acuerdo</h3>
+    <h3>Datos del Acuerdo</h3>
 
-        <!-- Campos adicionales -->
-        <label for="servicePayer" class="form-control-label">Wallet pagador servicio (empresa):</label>
-        <input type="text" id="servicePayer" placeholder="Wallet empresa" class="wallet-input" class="form-control"><br><br>
+    <!-- Campos adicionales -->
+    <label for="servicePayer">Wallet pagador servicio (empresa):</label>
+    <input type="text" id="servicePayer" placeholder="Wallet empresa" class="wallet-input"><br><br>
 
-        <label for="serviceProvider">Wallet proveedor servicio (freelancer):</label>
-        <input type="text" id="serviceProvider" value="0x8789dcfCC65FaF09bFF9CE6a37188062585d1B9A"
-            placeholder="Wallet freelancer" class="wallet-input"><br><br>
+    <label for="serviceProvider">Wallet proveedor servicio (freelancer):</label>
+    <input type="text" id="serviceProvider" value="0x8789dcfCC65FaF09bFF9CE6a37188062585d1B9A"
+        placeholder="Wallet freelancer" class="wallet-input"><br><br>
 
-        <label for="arbitrator">Wallet árbitro:</label>
-        <input type="text" id="arbitrator" value="0x0aE67cE895B26BdAb093542c8783b985a243E60C"
-            placeholder="Wallet árbitro" class="wallet-input"><br><br>
+    <label for="arbitrator">Wallet árbitro:</label>
+    <input type="text" id="arbitrator" value="0x0aE67cE895B26BdAb093542c8783b985a243E60C" placeholder="Wallet árbitro"
+        class="wallet-input"><br><br>
 
-        <label for="startDate">Fecha inicio:</label>
-        <input type="date" id="startDate"><br><br>
+    <label for="startDate">Fecha inicio:</label>
+    <input type="date" id="startDate"><br><br>
 
-        <label for="endDate">Fecha fin:</label>
-        <input type="date" id="endDate"><br><br>
+    <label for="endDate">Fecha fin:</label>
+    <input type="date" id="endDate"><br><br>
 
-        <label for="numHours">Nro. horas:</label>
-        <input type="number" id="numHours" min="0" step="1" value="40"><br><br>
+    <label for="numHours">Nro. horas:</label>
+    <input type="number" id="numHours" min="0" step="1" value="40"><br><br>
 
-        <label for="hourlyRate">Valor hora (USDC):</label>
-        <input type="number" id="hourlyRate" min="0" step="0.01" value="30" placeholder="USD $"><br><br>
+    <label for="hourlyRate">Valor hora (USDC):</label>
+    <input type="number" id="hourlyRate" min="0" step="0.01" value="30" placeholder="USD $"><br><br>
 
-        <label for="agreementAmount">Monto acuerdo (USDC):</label>
-        <input type="text" id="agreementAmount" readonly placeholder="USD $" value="1200"><br><br>
+    <label for="agreementAmount">Monto acuerdo (USDC):</label>
+    <input type="text" id="agreementAmount" readonly placeholder="USD $" value="1200"><br><br>
 
-        <label for="agreementAmount">Fee de arbitraje (USDC):</label>
-        <input type="text" id="arbitrateFee" readonly placeholder="USD $" value="1.5" class="fee-input"><br><br>
+    <label for="agreementAmount">Fee de arbitraje (USDC):</label>
+    <input type="text" id="arbitrateFee" readonly placeholder="USD $" value="1.5" class="fee-input"><br><br>
 
-        <label for="agreementAmount">Fee DAO (USDC):</label>
-        <input type="text" id="daoFee" readonly placeholder="USD $" value="1" class="fee-input"><br><br>
+    <label for="agreementAmount">Fee DAO (USDC):</label>
+    <input type="text" id="daoFee" readonly placeholder="USD $" value="1" class="fee-input"><br><br>
 
-        </br></br>
+    </br>
 
-        <button id="connectWallet">Conectar wallet</button>
-        <button id="createAgreement">Crear acuerdo (SPA y SPR?)</button>
+    <button id="connectWallet">Conectar wallet</button>
+    <button id="createAgreement">Crear acuerdo (SPA y SPR?)</button>
 
-        </br></br>
+    </br></br>
 
-        <!-- <button id="createAgreementByApi">Crear acuerdo (API)</button></br></br> -->
-        <!-- <button id="getAgreement">Consultar acuerdo (requiere quemar clave privada)</button></br></br> -->
+    <!-- <button id="createAgreementByApi">Crear acuerdo (API)</button></br></br> -->
+    <!-- <button id="getAgreement">Consultar acuerdo (requiere quemar clave privada)</button></br></br> -->
 
-        <!-- Campo de texto para ingresar el ID del acuerdo -->
-        <label for="agreementId">Id acuerdo:</label>
-        <input type="number" id="agreementId" min="0" step="1" placeholder="Ingresa ID del acuerdo" required
-            class="wallet-input">
-        <button id="getAgreement">Consultar acuerdo</button>
+    <!-- Campo de texto para ingresar el ID del acuerdo -->
+    <label for="agreementId">Id acuerdo:</label>
+    <input type="number" id="agreementId" min="0" step="1" placeholder="Ingresa ID del acuerdo" required
+        class="wallet-input">
+    <button id="getAgreement">Consultar acuerdo</button>
 
-        <!--<button id="updateState">Actualizar estado</button>-->
+    <!--<button id="updateState">Actualizar estado</button>-->
 
-        </br></br></br>
+    </br></br></br>
 
-        <button id="disagreement">Desacuerdo (SPA y SPR)</button>
-        <button id="resolveDisagreement">Resolver desacuerdo (ARB)</button>
-        <button id="payAgreement">Pagar acuerdo (WMC-AGR-PAY)</button>
+    <button id="disagreement">Desacuerdo (SPA y SPR)</button>
+    <button id="resolveDisagreement">Resolver desacuerdo (ARB)</button>
+    <button id="payAgreement">Pagar acuerdo (WMC-AGR-PAY)</button>
 
-        <!--<label for="agreementAmount">Fee de arbitraje (USDC):</label>-->
-    </div>
     <script src="ethers.umd.min.js"></script>
     <script src="wmc-front-script.js"></script>
     <script src="wmc-front-calculation.js"></script>
