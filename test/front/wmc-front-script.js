@@ -9,12 +9,11 @@ let apiBaseUrl; // = window.location.hostname === '127.0.0.1' ? 'http://localhos
 async function loadABI() {
     try {
         //const response = await fetch("../../artifacts/contracts/WMCServiceManagement-v2.sol/WMCServiceManagement.json");
-        const response = await fetch("abis/WMCAgreementManagement.json"); //WMCServiceManagement.json
+        const response = await fetch("abis/WMCAgreementManagement.json");
 
         const contractJson = await response.json();
         contractABI = contractJson.abi;
-        console.log("contractABI = ", contractABI);
-        //console.log("ABI cargado correctamente:", contractABI);
+
     } catch (error) {
         console.error("Error al cargar el ABI:", error);
     }
@@ -23,11 +22,6 @@ async function loadABI() {
 // Carga la configuración desde config.json
 async function loadConfig() {
     try {
-        //console.log("Cargando config... window.location.hostname = ", window.location.hostname);
-        //console.log("window.location.origin = ", window.location.origin);
-        //const response = await fetch("config.json");
-        //const config = await response.json();
-
         // Detecta el entorno actual y construye la URL base
         const baseUrl = window.location.hostname === '127.0.0.1' ? 
             'http://localhost:3000' : window.location.origin
@@ -39,7 +33,7 @@ async function loadConfig() {
         contractAddress = config.contractAddress;
         usdcTokenAddress = config.usdcTokenAddress;
         apiBaseUrl = config.apiBaseUrl;
-        //console.log("contractAddress - usdcTokenAddress - apiBaseUrl", contractAddress + " - " + usdcTokenAddress + " - " + apiBaseUrl);
+
     } catch (error) {
         console.error("Error al cargar config.json:", error);
     }
@@ -92,7 +86,6 @@ async function getAgreement() {
 
     // Instancia del contrato
     const contract = new ethers.Contract(contractAddress, contractABI, signer);
-
     // ID del acuerdo que deseas consultar
     const agreementId = document.getElementById("agreementId").value;
 
@@ -106,7 +99,7 @@ async function getAgreement() {
         console.log("Start Date:", agreement.startDate.toString());
         console.log("End Date:", agreement.endDate.toString());
         console.log("Amount:", agreement.amount.toString());
-        console.log("Estado:", agreement.estado);
+        console.log("Arbitration State:", agreement.arbitrationState);
         console.log("SPA Agree:", agreement.spaAgree);
         console.log("SPR Agree:", agreement.sprAgree);
     } catch (error) {
@@ -447,5 +440,5 @@ document.getElementById("createAgreement").addEventListener("click", createAgree
 //document.getElementById("createAgreementByApi").addEventListener("click", createAgreementByApi);
 document.getElementById("getAgreement").addEventListener("click", getAgreement);
 //document.getElementById("getAgreementByApi").addEventListener("click", getAgreementByApi);
-document.getElementById("updateState").addEventListener("click", updateState);
+//document.getElementById("updateState").addEventListener("click", updateState);
 document.getElementById("payAgreement").addEventListener("click", payAgreement);

@@ -25,11 +25,11 @@ task("post-compile", "Copia el ABI generado a la ruta de destino")
   .setAction(async () => {
     const sourceABIPath = path.join(
       __dirname,
-      "artifacts/contracts/WMCAgreementManagement-v2.sol/WMCAgreementManagement.json"
+      "artifacts/contracts/WMCAgreementManagement-v3.sol/WMCAgreementManagement.json"
     );
     const targetABIPath = path.join(
       __dirname,
-      "test/front-test/abis/WMCAgreementManagement.json"
+      "test/front/abis/WMCAgreementManagement.json"
     );
     try {
       // Verificar si el archivo de origen existe
