@@ -160,10 +160,8 @@ async function createAgreement() {
         amount: amount
     };
     
-    console.log("Datos acuerdo:", data);
-
     try {
-        console.log("Aprobando la transferencia de USDC. usdcTokenAddress = ", usdcTokenAddress);
+        console.log("Aprobando transferencia de USDC");
 
         // Instancia del contrato de USDC
         const usdcContract = new ethers.Contract(usdcTokenAddress, [
@@ -180,11 +178,11 @@ async function createAgreement() {
             maxFeePerGas: ethers.utils.parseUnits("60", "gwei") // Tarifa máxima total de gas
         });
 
-        console.log("Continua tx aprobación...");
+        console.log("Continua tx aprobación");
         await approveTx.wait();
-        console.log("Transferencia aprobada.");
+        console.log("Transferencia aprobada");
 
-        console.log("Estimando gas transacción crear acuerdo...");
+        console.log("Estimando gas tx crear acuerdo");
         const agreementGasEstimate = await contract.estimateGas.newAgreement(
             data.serviceProvider,
             data.servicePayer,
@@ -194,7 +192,7 @@ async function createAgreement() {
             data.amount
         );
 
-        console.log("Ejecutando newAgreement con gas estimado...");
+        console.log("Ejecutando tx newAgreement con gas estimado");
         const tx = await contract.newAgreement(
             data.serviceProvider,
             data.servicePayer,
@@ -209,9 +207,12 @@ async function createAgreement() {
             }
         );
 
-        console.log("Esperando confirmación de la transacción...");
+        console.log("Esperando confirmación de la transacción");
         await tx.wait();
-        console.log("newAgreement ejecutada con éxito:", tx.hash);
+        console.log("Tx newAgreement ejecutada con éxito. Hash de la tx: ", tx.hash);
+
+        //TODO: Crear acuerdo en BD
+
     } catch (error) {
         // Captura el mensaje del error devuelto por 'require' y lo muestra en el front-end
         //console.log("error.data = ", error.data);
