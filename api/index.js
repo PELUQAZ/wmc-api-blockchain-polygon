@@ -46,7 +46,8 @@ app.use((req, res, next) => {
 app.use(cors({
   origin: [
     'https://workmarketcap.myshopify.com',
-    'https://www.workmarketcap.com'
+    'https://www.workmarketcap.com',
+    'https://wmc-agreements-app-hncub6e4edcphph5.canadacentral-01.azurewebsites.net'
   ]
 }));
 

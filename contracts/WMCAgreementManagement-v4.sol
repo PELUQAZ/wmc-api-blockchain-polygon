@@ -1,4 +1,6 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: All Rights Reserved
+// © 2024, WorkMarketCap. Todos los derechos reservados.
+
 pragma solidity ^0.8.24;
 
 /// @title WMCServiceManagement - Gestión de acuerdos con fees para DAO y árbitros.
