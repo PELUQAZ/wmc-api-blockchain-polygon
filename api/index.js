@@ -14,7 +14,11 @@ app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
-        frameAncestors: ["'self'", "https://*.myshopify.com", "https://*.workmarketcap.com"],
+        frameAncestors: [
+          "'self'", 
+          "https://*.myshopify.com", 
+          "https://*.workmarketcap.com",
+          "https://wmc-agreements-app-hncub6e4edcphph5.canadacentral-01.azurewebsites.net"],
       },
     },
   })
@@ -23,7 +27,8 @@ app.use(
 app.use((req, res, next) => {
   const allowedOrigins = [
     'https://workmarketcap.myshopify.com',
-    'https://www.workmarketcap.com'
+    'https://www.workmarketcap.com',
+    'https://wmc-agreements-app-hncub6e4edcphph5.canadacentral-01.azurewebsites.net'
   ];
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
