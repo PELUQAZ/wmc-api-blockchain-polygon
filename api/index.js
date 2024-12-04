@@ -18,8 +18,7 @@ app.use(
           "'self'", 
           "https://*.myshopify.com", 
           "https://*.workmarketcap.com",
-          "https://workmarketcap.com",
-          "https://wmc-agreements-app-hncub6e4edcphph5.canadacentral-01.azurewebsites.net"],
+          "https://workmarketcap.com"],
       },
     },
   })
@@ -28,8 +27,7 @@ app.use(
 app.use((req, res, next) => {
   const allowedOrigins = [
     'https://workmarketcap.myshopify.com',
-    'https://workmarketcap.com',
-    'https://wmc-agreements-app-hncub6e4edcphph5.canadacentral-01.azurewebsites.net'
+    'https://workmarketcap.com'
   ];
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
@@ -47,8 +45,7 @@ app.use((req, res, next) => {
 app.use(cors({
   origin: [
     'https://workmarketcap.myshopify.com',
-    'https://workmarketcap.com',
-    'https://wmc-agreements-app-hncub6e4edcphph5.canadacentral-01.azurewebsites.net'
+    'https://workmarketcap.com'
   ]
 }));
 
