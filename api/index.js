@@ -17,7 +17,6 @@ app.use(
         frameAncestors: [
           "'self'", 
           "https://*.myshopify.com", 
-          "https://*.workmarketcap.com",
           "https://workmarketcap.com"],
       },
     },
