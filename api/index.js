@@ -14,7 +14,7 @@ app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
-        frameAncestors: ["'self'", "https://*.myshopify.com", "https://www.workmarketcap.com"],
+        frameAncestors: ["'self'", "https://*.myshopify.com", "https://*.workmarketcap.com"],
       },
     },
   })
