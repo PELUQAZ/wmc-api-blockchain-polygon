@@ -14,20 +14,37 @@ app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
-        frameAncestors: ["'self'", "https://*.myshopify.com"],
+        frameAncestors: ["'self'", "https://*.myshopify.com", "https://www.workmarketcap.com"],
       },
     },
   })
 );
 
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://workmarketcap.myshopify.com'); // Reemplaza con el dominio de tu tienda
+  const allowedOrigins = [
+    'https://workmarketcap.myshopify.com',
+    'https://www.workmarketcap.com'
+  ];
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+
+  //res.setHeader('Access-Control-Allow-Origin', 'https://workmarketcap.myshopify.com'); // Reemplaza con el dominio de tu tienda
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE'); // Métodos que permites
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Cabeceras que permites
   next();
 });
 
-app.use(cors());
+//app.use(cors());
+// Habilitar cors para mayor flexibilidad
+app.use(cors({
+  origin: [
+    'https://workmarketcap.myshopify.com',
+    'https://www.workmarketcap.com'
+  ]
+}));
+
 app.use(express.json());
 
 // Ruta para archivos estáticos (sirve el frontend)
