@@ -1,10 +1,6 @@
 {
   "name": "wmc-api-blockchain-polygon",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "dev": "node api/index.js"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",

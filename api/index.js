@@ -26,14 +26,18 @@ app.use(
 app.use((req, res, next) => {
   const allowedOrigins = [
     'https://workmarketcap.myshopify.com',
-    'https://workmarketcap.com'
+    'https://workmarketcap.com',
+    'http://127.0.0.1:5500'
   ];
   const origin = req.headers.origin;
+
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
   }
 
   //res.setHeader('Access-Control-Allow-Origin', 'https://workmarketcap.myshopify.com'); // Reemplaza con el dominio de tu tienda
+  //res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5500'); // Reemplaza con el dominio de tu tienda
+
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE'); // Métodos que permites
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Cabeceras que permites
   next();

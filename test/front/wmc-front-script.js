@@ -27,12 +27,12 @@ async function loadConfig() {
             'http://localhost:3000' : window.location.origin
         //const response = await fetch("/api/config");
         //const response = await fetch("http://localhost:3000/api/config");
-        const response = await fetch(`${baseUrl}/api/config`);
+        //const response = await fetch(`${baseUrl}/api/config`);
 
-        const config = await response.json();
-        contractAddress = config.contractAddress;
-        usdcTokenAddress = config.usdcTokenAddress;
-        apiBaseUrl = config.apiBaseUrl;
+        //const config = await response.json();
+        contractAddress = '0xE2e2b4297c51bF174b656F064BA3cb82095A5399'; //config.contractAddress;
+        usdcTokenAddress = '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359'; //config.usdcTokenAddress;
+        apiBaseUrl = baseUrl; //config.apiBaseUrl;
 
     } catch (error) {
         console.error("Error al cargar config.json:", error);
@@ -41,10 +41,11 @@ async function loadConfig() {
 
 // Función para conectar Metamask
 async function connectWallet() {
+    
     if (typeof ethers === "undefined") {
         console.error("ethers.js no se cargó correctamente. Revisa el archivo 'ethers.umd.min.js'");
     }
-    //console.log("ethers.utils = ", ethers.utils);
+
     if (!ethers.utils) {
         console.error("ethers.js no está cargado correctamente.");
     } else {
@@ -57,11 +58,10 @@ async function connectWallet() {
                         const userAddress = accounts[0];
                         // Guarda la dirección en localStorage para usarla luego
                         localStorage.setItem('userAddress', userAddress);
-                        console.log(`Wallet connected: ${userAddress}`);
+                        console.log(`Wallet conectada: ${userAddress}`);
                         // Muestra la dirección en el campo "Wallet proveedor servicio (freelancer)"
                         document.getElementById("servicePayer").value = userAddress;
                     })
-                //console.log("Wallet conectada:", await signer.getAddress());
             } catch (error) {
                 console.error("Error al conectar con Metamask:", error);
             }
