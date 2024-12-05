@@ -54,11 +54,17 @@ async function connectWallet() {
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
                 signer = provider.getSigner();
                 ethereum.request({ method: "eth_requestAccounts" })
-                    .then((accounts) => {
+                    .then(async (accounts) => {
                         const userAddress = accounts[0];
                         // Guarda la dirección en localStorage para usarla luego
                         localStorage.setItem('userAddress', userAddress);
                         console.log(`Wallet conectada: ${userAddress}`);
+
+                        // Obtener la URL de la red blockchain
+                        const network = await provider.getNetwork();
+                        console.log(`Conectado a la red: ${network.name} (Chain ID: ${network.chainId})`);
+                        console.log(`URL del proveedor: ${provider.connection.url}`);
+
                         // Muestra la dirección en el campo "Wallet proveedor servicio (freelancer)"
                         document.getElementById("servicePayer").value = userAddress;
                     })
