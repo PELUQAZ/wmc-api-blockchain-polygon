@@ -70,4 +70,5 @@ jobs:
           app-name: 'wmc-agreements-app'
           slot-name: 'Production'
           package: release.zip
+          enable-remote-build: true
           
