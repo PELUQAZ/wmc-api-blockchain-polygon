@@ -62,8 +62,8 @@ async function connectWallet() {
 
                         // Obtener la URL de la red blockchain
                         const network = await provider.getNetwork();
-                        console.log(`Conectado a la red: ${network.name} (Chain ID: ${network.chainId})`);
-                        console.log(`URL del proveedor: ${provider.connection.url}`);
+                        console.log(`Red conectada: ${network.name} (Chain ID: ${network.chainId})`);
+                        console.log(`Proveedor: ${provider.connection.url}`);
 
                         // Muestra la dirección en el campo "Wallet proveedor servicio (freelancer)"
                         document.getElementById("servicePayer").value = userAddress;
@@ -98,7 +98,7 @@ async function getAgreement() {
     try {
         const agreement = await contract.agreements(agreementId);
         // Desglosa los datos obtenidos del acuerdo
-        console.log("Datos del acuerdo:");
+        console.log("Datos acuerdo:");
         console.log("Service Provider:", agreement.serviceProvider);
         console.log("Service Payer:", agreement.servicePayer);
         console.log("Arbitrator:", agreement.arbitrator);
