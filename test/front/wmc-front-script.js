@@ -3,7 +3,7 @@ let contractAddress;
 let usdcTokenAddress;
 let contractABI;
 let signer;
-let apiBaseUrl; // = window.location.hostname === '127.0.0.1' ? 'http://localhost:3000' : 'https://wmc-agreements-app-hncub6e4edcphph5.canadacentral-01.azurewebsites.net';
+//let apiBaseUrl; // = window.location.hostname === '127.0.0.1' ? 'http://localhost:3000' : 'https://wmc-agreements-app-hncub6e4edcphph5.canadacentral-01.azurewebsites.net';
 
 // Carga el ABI dinámicamente desde el archivo generado por Hardhat
 async function loadABI() {
@@ -22,18 +22,16 @@ async function loadABI() {
 // Carga la configuración desde config.json
 async function loadConfig() {
     try {
-        // Detecta el entorno actual y construye la URL base
-        const baseUrl = window.location.hostname === '127.0.0.1' ? 
-            'http://localhost:3000' : window.location.origin
+        //// Detecta el entorno actual y construye la URL base
+        //const baseUrl = window.location.hostname === '127.0.0.1' ? 'http://localhost:3000' : window.location.origin
         //const response = await fetch("/api/config");
         //const response = await fetch("http://localhost:3000/api/config");
         //const response = await fetch(`${baseUrl}/api/config`);
-
         //const config = await response.json();
+        //apiBaseUrl = baseUrl; //config.apiBaseUrl;
+
         contractAddress = '0xE2e2b4297c51bF174b656F064BA3cb82095A5399'; //config.contractAddress;
         usdcTokenAddress = '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359'; //config.usdcTokenAddress;
-        apiBaseUrl = baseUrl; //config.apiBaseUrl;
-
     } catch (error) {
         console.error("Error al cargar config.json:", error);
     }
