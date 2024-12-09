@@ -1,6 +1,6 @@
 // Variables para los datos del contrato
-let contractAddress;
-let usdcTokenAddress;
+let CONTRACT_ADDRESS;
+let USDC_TOKEN_ADDRESS;
 let contractABI;
 let signer;
 //let apiBaseUrl; // = window.location.hostname === '127.0.0.1' ? 'http://localhost:3000' : 'https://wmc-agreements-app-hncub6e4edcphph5.canadacentral-01.azurewebsites.net';
@@ -30,8 +30,9 @@ async function loadConfig() {
         //const config = await response.json();
         //apiBaseUrl = baseUrl; //config.apiBaseUrl;
 
-        contractAddress = '0xE2e2b4297c51bF174b656F064BA3cb82095A5399'; //config.contractAddress;
-        usdcTokenAddress = '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359'; //config.usdcTokenAddress;
+        CONTRACT_ADDRESS = config.contractAddress; //'0xE2e2b4297c51bF174b656F064BA3cb82095A5399';
+        USDC_TOKEN_ADDRESS = config.usdcTokenAddress; //'0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359';
+        
     } catch (error) {
         console.error("Error al cargar config.json:", error);
     }
@@ -83,13 +84,13 @@ async function getAgreement() {
         return;
     }
 
-    if (!contractAddress || !contractABI) {
+    if (!CONTRACT_ADDRESS || !contractABI) {
         console.error("La configuración o el ABI no están cargados correctamente.");
         return;
     }
 
     // Instancia del contrato
-    const contract = new ethers.Contract(contractAddress, contractABI, signer);
+    const contract = new ethers.Contract(CONTRACT_ADDRESS, contractABI, signer);
     // ID del acuerdo que deseas consultar
     const agreementId = document.getElementById("agreementId").value;
 
@@ -118,13 +119,13 @@ async function createAgreement() {
         return;
     }
 
-    if (!contractAddress || !usdcTokenAddress || !contractABI) {
+    if (!CONTRACT_ADDRESS || !USDC_TOKEN_ADDRESS || !contractABI) {
         console.error("La configuración o el ABI no están cargados correctamente.");
         return;
     }
 
     // Instancia del contrato
-    const contract = new ethers.Contract(contractAddress, contractABI, signer);
+    const contract = new ethers.Contract(CONTRACT_ADDRESS, contractABI, signer);
 
     // Obtén los valores de los campos del formulario
     const serviceProvider = document.getElementById("serviceProvider").value;
@@ -168,15 +169,15 @@ async function createAgreement() {
         console.log("Aprobando transferencia de USDC");
 
         // Instancia del contrato de USDC
-        const usdcContract = new ethers.Contract(usdcTokenAddress, [
+        const usdcContract = new ethers.Contract(USDC_TOKEN_ADDRESS, [
             "function approve(address spender, uint256 amount) external returns (bool)"
         ], signer);
 
         console.log("Inicia tx aprobación. Estimando gas para transacción de aprobación... amount = ", data.amount);
-        const approveGasEstimate = await usdcContract.estimateGas.approve(contractAddress, data.amount);
-        console.log("Estima ok. contractAddress = " + contractAddress);
+        const approveGasEstimate = await usdcContract.estimateGas.approve(CONTRACT_ADDRESS, data.amount);
+        console.log("Estima ok. CONTRACT_ADDRESS = " + CONTRACT_ADDRESS);
         // Ejecuta la transacción usando la estimación de gas
-        const approveTx = await usdcContract.approve(contractAddress, data.amount, {
+        const approveTx = await usdcContract.approve(CONTRACT_ADDRESS, data.amount, {
             gasLimit: approveGasEstimate.toNumber() + 100000, // Utiliza la estimación de gas
             maxPriorityFeePerGas: ethers.utils.parseUnits("30", "gwei"), // Tarifa de prioridad mínima requerida
             maxFeePerGas: ethers.utils.parseUnits("60", "gwei") // Tarifa máxima total de gas
@@ -235,13 +236,13 @@ async function payAgreement() {
         return;
     }
 
-    if (!contractAddress || !contractABI) {
+    if (!CONTRACT_ADDRESS || !contractABI) {
         console.error("La configuración o el ABI no están cargados correctamente.");
         return;
     }
     console.log("Iniciando pagos");
     // Instancia del contrato
-    const contract = new ethers.Contract(contractAddress, contractABI, signer);
+    const contract = new ethers.Contract(CONTRACT_ADDRESS, contractABI, signer);
 
     // ID del acuerdo que deseas consultar
     const agreementId = document.getElementById("agreementId").value;
