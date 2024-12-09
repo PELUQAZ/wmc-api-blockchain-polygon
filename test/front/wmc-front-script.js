@@ -30,9 +30,9 @@ async function loadConfig() {
         //const config = await response.json();
         //apiBaseUrl = baseUrl; //config.apiBaseUrl;
 
-        CONTRACT_ADDRESS = config.contractAddress; //'0xE2e2b4297c51bF174b656F064BA3cb82095A5399';
-        USDC_TOKEN_ADDRESS = config.usdcTokenAddress; //'0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359';
-        
+        CONTRACT_ADDRESS = '0xE2e2b4297c51bF174b656F064BA3cb82095A5399'; //config.contractAddress;
+        USDC_TOKEN_ADDRESS = '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359'; //config.usdcTokenAddress;
+
     } catch (error) {
         console.error("Error al cargar config.json:", error);
     }
