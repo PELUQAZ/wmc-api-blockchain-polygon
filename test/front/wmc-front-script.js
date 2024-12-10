@@ -264,6 +264,40 @@ async function payAgreement() {
     }
 }
 
+async function disagreement() {
+    if (!signer) {
+        alert("Primero, conecta tu wallet.");
+        return;
+    }
+
+    if (!CONTRACT_ADDRESS || !contractABI) {
+        console.error("La configuración o el ABI no están cargados correctamente.");
+        return;
+    }
+    console.log("Iniciando desacuerdo");
+    // Instancia del contrato
+    const contract = new ethers.Contract(CONTRACT_ADDRESS, contractABI, signer);
+
+    // ID del acuerdo que deseas consultar
+    const agreementId = document.getElementById("agreementId").value;
+    console.log("Iniciando estimación de gas");
+    try {
+        const gasEstimate = await contract.estimateGas.setAgreement(agreementId, false);
+        console.log("Gas estimado. Iniciando pagos.");
+        const tx = await contract.setAgreement(
+            agreementId,
+            false,
+            {
+                gasLimit: gasEstimate.toNumber() + 100000, // 29000000 Ajusta según sea necesario
+                maxPriorityFeePerGas: ethers.utils.parseUnits("30", "gwei"), // Tarifa de prioridad mínima requerida
+                maxFeePerGas: ethers.utils.parseUnits("60", "gwei") // Tarifa máxima total de gas
+            });
+        console.log("Desacuerdo pagado - tx.hash = ", tx);
+    } catch (error) {
+        console.error("Error al pagar desacuerdo:", error);
+    }
+}
+
 /*// Función para consultar el acuerdo a través de la API
 async function getAgreementByApi() {
     //console.log("signer = ", signer);
@@ -447,4 +481,5 @@ document.getElementById("createAgreement").addEventListener("click", createAgree
 document.getElementById("getAgreement").addEventListener("click", getAgreement);
 //document.getElementById("getAgreementByApi").addEventListener("click", getAgreementByApi);
 //document.getElementById("updateState").addEventListener("click", updateState);
+document.getElementById("disagreement").addEventListener("click", disagreement);
 document.getElementById("payAgreement").addEventListener("click", payAgreement);
