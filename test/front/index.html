@@ -63,12 +63,10 @@
     <label for="agreementAmount">Fee DAO (USDC):</label>
     <input type="text" id="daoFee" readonly placeholder="USD $" value="0.5" class="fee-input"><br><br>
 
-    </br>
-
     <button id="connectWallet">Conectar wallet</button>
     <button id="createAgreement">Crear acuerdo (SPA y SPR?)</button>
 
-    </br></br>
+    </br></br></br>
 
     <!-- <button id="createAgreementByApi">Crear acuerdo (API)</button></br></br> -->
     <!-- <button id="getAgreement">Consultar acuerdo (requiere quemar clave privada)</button></br></br> -->
@@ -76,16 +74,17 @@
     <!-- Campo de texto para ingresar el ID del acuerdo -->
     <label for="agreementId">Id acuerdo:</label>
     <input type="number" id="agreementId" min="0" step="1" placeholder="Ingresa ID del acuerdo" required
-        class="wallet-input">
+        class="wallet-input"></br>
     <button id="getAgreement">Consultar acuerdo</button>
+    <button id="payAgreement">Pagar acuerdo (WMC-Agreements-Payer)</button>
 
     <!--<button id="updateState">Actualizar estado</button>-->
 
     </br></br></br>
 
-    <button id="disagreement">Desacuerdo (SPA y SPR)</button>
-    <button id="resolveDisagreement">Resolver desacuerdo (ARB)</button>
-    <button id="payAgreement">Pagar acuerdo (WMC-Agreements-Payer)</button>
+    <button id="disagreement">Desacuerdo (SPA y SPR) ... En construcción</button></br>
+    <button id="agreement">Acuerdo (SPA y SPR) ... En construcción</button></br>
+    <button id="resolveDisagreement">Resolver desacuerdo (ARB) ... En construcción</button>
 
     <script src="ethers.umd.min.js"></script>
     <script src="wmc-front-script.js"></script>

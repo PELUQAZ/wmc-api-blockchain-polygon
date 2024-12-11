@@ -54,6 +54,7 @@ async function connectWallet() {
                 signer = provider.getSigner();
                 ethereum.request({ method: "eth_requestAccounts" })
                     .then(async (accounts) => {
+                        console.log("accounts = ", accounts);
                         const userAddress = accounts[0];
                         // Guarda la dirección en localStorage para usarla luego
                         localStorage.setItem('userAddress', userAddress);
@@ -477,9 +478,6 @@ async function getAgreementByApi() {
 // Event listeners para los botones
 document.getElementById("connectWallet").addEventListener("click", connectWallet);
 document.getElementById("createAgreement").addEventListener("click", createAgreement);
-//document.getElementById("createAgreementByApi").addEventListener("click", createAgreementByApi);
 document.getElementById("getAgreement").addEventListener("click", getAgreement);
-//document.getElementById("getAgreementByApi").addEventListener("click", getAgreementByApi);
-//document.getElementById("updateState").addEventListener("click", updateState);
 document.getElementById("disagreement").addEventListener("click", disagreement);
 document.getElementById("payAgreement").addEventListener("click", payAgreement);
