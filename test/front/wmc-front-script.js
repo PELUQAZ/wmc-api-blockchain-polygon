@@ -54,7 +54,6 @@ async function connectWallet() {
                 signer = provider.getSigner();
                 ethereum.request({ method: "eth_requestAccounts" })
                     .then(async (accounts) => {
-                        console.log("accounts = ", accounts);
                         const userAddress = accounts[0];
                         // Guarda la dirección en localStorage para usarla luego
                         localStorage.setItem('userAddress', userAddress);
@@ -125,9 +124,6 @@ async function createAgreement() {
         return;
     }
 
-    // Instancia del contrato
-    const contract = new ethers.Contract(CONTRACT_ADDRESS, contractABI, signer);
-
     // Obtén los valores de los campos del formulario
     const serviceProvider = document.getElementById("serviceProvider").value;
     const servicePayer = document.getElementById("servicePayer").value;
@@ -144,7 +140,6 @@ async function createAgreement() {
     const arbitrateFee = parseFloat(document.getElementById("arbitrateFee").value) || 0;
     const daoFee = parseFloat(document.getElementById("daoFee").value) || 0;
     const totalAmount = (hourlyRate * numHours) + arbitrateFee + daoFee;
-
     // Formatear el monto total a la cantidad de decimales para USDC (6 decimales)
     const amount = ethers.utils.parseUnits(totalAmount.toString(), 6);
 
@@ -168,6 +163,9 @@ async function createAgreement() {
     
     try {
         console.log("Aprobando transferencia de USDC");
+
+        // Instancia del contrato
+        const contract = new ethers.Contract(CONTRACT_ADDRESS, contractABI, signer);
 
         // Instancia del contrato de USDC
         const usdcContract = new ethers.Contract(USDC_TOKEN_ADDRESS, [
@@ -298,176 +296,6 @@ async function disagreement() {
         console.error("Error al pagar desacuerdo:", error);
     }
 }
-
-/*// Función para consultar el acuerdo a través de la API
-async function getAgreementByApi() {
-    //console.log("signer = ", signer);
-    if (!signer) {
-        alert("Primero, conecta tu wallet.");
-        return;
-    }
-
-    //const agreementId = 0; // El ID del acuerdo que quieres consultar
-    // Obtiene el valor del ID de acuerdo del campo de texto
-    const agreementIdInput = document.getElementById("agreementId").value;
-    const agreementId = parseInt(agreementIdInput, 10); // Asegura que sea un número entero
-    if (isNaN(agreementId) || agreementId < 0) {
-        alert("Favor ingresa un ID de acuerdo válido (entero mayor o igual a cero).");
-        return;
-    }
-
-    const userAddress = localStorage.getItem('userAddress');
-    const message = `Consulta de acuerdo ${agreementId} para el usuario ${userAddress}`;
-
-    console.log("Iniciando getAgreementByApi");
-    try {
-        // Firma el mensaje
-        const signature = await signer.signMessage(message);
-        //console.log("Firma del mensaje:", signature);
-
-        // Llama a la API pasando la firma y la dirección
-        const response = await fetch(`${apiBaseUrl}/api/agreements/${agreementId}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                userAddress: userAddress,
-                signature: signature
-            })
-        });
-
-        // Verifica si la respuesta es exitosa
-        if (!response.ok) {
-            throw new Error(`Error en la respuesta de la API: ${response.statusText}`);
-        }
-
-        // Obtiene los datos del acuerdo en formato JSON
-        const agreement = await response.json();
-
-        // Desglosa los datos obtenidos del acuerdo
-        console.log("Datos del acuerdo:");
-        console.log("Service Provider:", agreement.serviceProvider);
-        console.log("Service Payer:", agreement.servicePayer);
-        console.log("Arbitrator:", agreement.arbitrator);
-        console.log("Start Date:", agreement.startDate);
-        console.log("End Date:", agreement.endDate);
-        console.log("Amount:", agreement.amount);
-        console.log("Estado:", agreement.estado);
-        console.log("SPA Agree:", agreement.spaAgree);
-        console.log("SPR Agree:", agreement.sprAgree);
-    } catch (error) {
-        console.error("Error al consultar el acuerdo:", error);
-    }
-}*/
-
-/*async function updateState() {
-    if (!signer) {
-        alert("Primero, conecta tu wallet.");
-        return;
-    }
-
-    if (!contractAddress || !contractABI) {
-        console.error("La configuración o el ABI no están cargados correctamente.");
-        return;
-    }
-
-    // Instancia del contrato
-    const contract = new ethers.Contract(contractAddress, contractABI, signer);
-
-    // ID del acuerdo que deseas consultar
-    const agreementId = document.getElementById("agreementId").value;
-
-    try {
-        const stateUpdated = await contract.updateState(agreementId);
-        console.log("Estado actualizado - stateUpdated = ", stateUpdated);
-    } catch (error) {
-        console.error("Error al actualizar estado del acuerdo:", error);
-    }
-}*/
-
-/*async function createAgreementByApi() {
-    if (!signer) {
-        alert("Primero, conecta tu wallet.");
-        return;
-    }
-
-    //if (!contractAddress || !usdcTokenAddress || !apiBaseUrl) {
-    //    console.error("La configuración no está cargada correctamente.");
-    //    return;
-    //}
-
-    // Instancia del contrato
-    //const contract = new ethers.Contract(contractAddress, contractABI, signer);
-
-    const userAddress = localStorage.getItem('userAddress');
-
-    const serviceProvider = "0x8789dcfCC65FaF09bFF9CE6a37188062585d1B9A";
-    const servicePayer = userAddress; //"0x31e331E751e490ef39e8B269399a76f483b2b5Af"
-    const arbitrator = "0x0aE67cE895B26BdAb093542c8783b985a243E60C";
-    const startDate = 1731110400;
-    const endDate = 1735603200;
-    const amount = 5000000;
-
-    // Parámetros del acuerdo
-    const agreementData = {
-        serviceProvider: serviceProvider,
-        servicePayer: servicePayer,
-        arbitrator: arbitrator,
-        startDate: startDate, //1730851200 = 2024-11-06 00:00:00 (UTC) - 1730937600 = 2024-11-07 00:00:00 (UTC)
-        endDate: endDate, //1733529600 = 2024-12-07 00:00:00 (UTC)
-        amount: amount //ethers.utils.parseUnits("1", 6) // USDC, en este caso 1 dólar
-    };
-
-    console.log("Iniciando createAgreementByApi");
-
-    try {
-        // Estimar gas y aprobar USDC
-        const usdcContract = new ethers.Contract(usdcTokenAddress, [
-            "function approve(address spender, uint256 amount) external returns (bool)"
-        ], signer);
-        
-        //const approveTx = await usdcContract.approve(contractAddress, agreementData.amount);
-        const approveGasEstimate = await usdcContract.estimateGas.approve(contractAddress, agreementData.amount);
-        const approveTx = await usdcContract.approve(contractAddress, agreementData.amount, {
-            gasLimit: approveGasEstimate.toNumber() + 100000, // Utiliza la estimación de gas
-            maxPriorityFeePerGas: ethers.utils.parseUnits("30", "gwei"), // Tarifa de prioridad mínima requerida
-            maxFeePerGas: ethers.utils.parseUnits("60", "gwei") // Tarifa máxima total de gas
-        });
-        await approveTx.wait();
-
-        console.log("USDC aprobado.");
-
-        // Generar el mensaje para firmar, permitiendo que el backend lo valide
-        const message = `Solicitud para crear acuerdo con ID aleatorio para el usuario ${agreementData.servicePayer}`;
-        const signature = await signer.signMessage(message);
-
-        // Llama a la API pasando la firma y la dirección
-        const response = await fetch(`${apiBaseUrl}/api/agreements`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                ...agreementData,
-                signature: signature
-            })
-        });
-
-        // Verifica si la respuesta es exitosa
-        if (!response.ok) {
-            throw new Error(`Error en la respuesta de la API: ${response.statusText}`);
-        }
-
-        // Obtiene los datos del acuerdo en formato JSON
-        const result = await response.json();
-        console.log("Acuerdo creado con éxito:", result.transactionHash);
-
-    } catch (error) {
-        console.error("Error al consultar el acuerdo:", error);
-    }
-
-}*/
 
 // Carga la configuración y el ABI al inicio
 (async () => {

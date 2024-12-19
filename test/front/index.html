@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactuar con el Contrato</title>
-    <!--<link rel="stylesheet" href="https://workmarketcap.myshopify.com/cdn/shop/t/5/assets/app.css">-->
+    <!--<link rel="stylesheet" href="https://workmarketcap.com/cdn/shop/t/5/assets/app.css">-->
     <style>
         /* Ajusta el ancho de los campos de wallet para que las direcciones se vean completas */
         .wallet-input {
@@ -15,7 +15,6 @@
             font-family: monospace;
             /* Opcional, para mejorar la visibilidad de direcciones largas */
         }
-
         .fee-input {
             width: 100%;
             max-width: 50px;
@@ -35,12 +34,11 @@
     <input type="text" id="servicePayer" placeholder="Wallet empresa" class="wallet-input"><br><br>
 
     <label for="serviceProvider">Wallet proveedor servicio (freelancer):</label>
-    <input type="text" id="serviceProvider" value="0x8789dcfCC65FaF09bFF9CE6a37188062585d1B9A"
-        placeholder="Wallet freelancer" class="wallet-input"><br><br>
+    <input type="text" id="serviceProvider" placeholder="Wallet freelancer" class="wallet-input"><br><br>
 
     <label for="arbitrator">Wallet árbitro:</label>
-    <input type="text" id="arbitrator" value="0x0aE67cE895B26BdAb093542c8783b985a243E60C"
-        placeholder="Wallet árbitro" class="wallet-input"><br><br>
+    <input type="text" id="arbitrator" value="0x31e331E751e490ef39e8B269399a76f483b2b5Af" placeholder="Wallet árbitro"
+        class="wallet-input"><br><br>
 
     <label for="startDate">Fecha inicio:</label>
     <input type="date" id="startDate"><br><br>
@@ -68,9 +66,6 @@
 
     </br></br></br>
 
-    <!-- <button id="createAgreementByApi">Crear acuerdo (API)</button></br></br> -->
-    <!-- <button id="getAgreement">Consultar acuerdo (requiere quemar clave privada)</button></br></br> -->
-
     <!-- Campo de texto para ingresar el ID del acuerdo -->
     <label for="agreementId">Id acuerdo:</label>
     <input type="number" id="agreementId" min="0" step="1" placeholder="Ingresa ID del acuerdo" required
@@ -78,12 +73,10 @@
     <button id="getAgreement">Consultar acuerdo</button>
     <button id="payAgreement">Pagar acuerdo (WMC-Agreements-Payer)</button>
 
-    <!--<button id="updateState">Actualizar estado</button>-->
-
     </br></br></br>
 
-    <button id="disagreement">Desacuerdo (SPA y SPR) ... En construcción</button></br>
-    <button id="agreement">Acuerdo (SPA y SPR) ... En construcción</button></br>
+    <button id="disagreement">Desacuerdo (SPA y SPR) ... En construcción</button></br></br>
+    <button id="agreement">Acuerdo (SPA y SPR) ... En construcción</button></br></br>
     <button id="resolveDisagreement">Resolver desacuerdo (ARB) ... En construcción</button>
 
     <script src="ethers.umd.min.js"></script>
