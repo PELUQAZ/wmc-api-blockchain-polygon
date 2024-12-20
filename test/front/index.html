@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactuar con el Contrato</title>
-    <!--<link rel="stylesheet" href="https://workmarketcap.myshopify.com/cdn/shop/t/5/assets/app.css">-->
+    <!--<link rel="stylesheet" href="https://workmarketcap.com/cdn/shop/t/5/assets/app.css">-->
     <style>
         /* Ajusta el ancho de los campos de wallet para que las direcciones se vean completas */
         .wallet-input {
@@ -15,7 +15,6 @@
             font-family: monospace;
             /* Opcional, para mejorar la visibilidad de direcciones largas */
         }
-
         .fee-input {
             width: 100%;
             max-width: 50px;
@@ -38,7 +37,8 @@
     <input type="text" id="serviceProvider" placeholder="Wallet freelancer" class="wallet-input"><br><br>
 
     <label for="arbitrator">Wallet árbitro:</label>
-    <input type="text" id="arbitrator" placeholder="Wallet árbitro" class="wallet-input"><br><br>
+    <input type="text" id="arbitrator" value="0x31e331E751e490ef39e8B269399a76f483b2b5Af" placeholder="Wallet árbitro"
+        class="wallet-input"><br><br>
 
     <label for="startDate">Fecha inicio:</label>
     <input type="date" id="startDate"><br><br>
@@ -75,8 +75,8 @@
 
     </br></br></br>
 
-    <button id="disagreement">Desacuerdo (SPA y SPR) ... En construcción</button>
-    <button id="agreement">Acuerdo (SPA y SPR) ... En construcción</button>
+    <button id="disagreement">Desacuerdo (SPA y SPR) ... En construcción</button></br></br>
+    <button id="agreement">Acuerdo (SPA y SPR) ... En construcción</button></br></br>
     <button id="resolveDisagreement">Resolver desacuerdo (ARB) ... En construcción</button>
 
     <script src="ethers.umd.min.js"></script>

@@ -54,7 +54,6 @@ async function connectWallet() {
                 signer = provider.getSigner();
                 ethereum.request({ method: "eth_requestAccounts" })
                     .then(async (accounts) => {
-                        console.log("accounts = ", accounts);
                         const userAddress = accounts[0];
                         // Guarda la dirección en localStorage para usarla luego
                         localStorage.setItem('userAddress', userAddress);
@@ -141,7 +140,6 @@ async function createAgreement() {
     const arbitrateFee = parseFloat(document.getElementById("arbitrateFee").value) || 0;
     const daoFee = parseFloat(document.getElementById("daoFee").value) || 0;
     const totalAmount = (hourlyRate * numHours) + arbitrateFee + daoFee;
-
     // Formatear el monto total a la cantidad de decimales para USDC (6 decimales)
     const amount = ethers.utils.parseUnits(totalAmount.toString(), 6);
 
