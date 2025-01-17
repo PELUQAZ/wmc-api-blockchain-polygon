@@ -5,84 +5,190 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactuar con el Contrato</title>
-    <!--<link rel="stylesheet" href="https://workmarketcap.com/cdn/shop/t/5/assets/app.css">-->
     <style>
-        /* Ajusta el ancho de los campos de wallet para que las direcciones se vean completas */
-        .wallet-input {
-            width: 100%;
-            max-width: 310px;
-            /* Ajusta este valor según necesites */
-            font-family: monospace;
-            /* Opcional, para mejorar la visibilidad de direcciones largas */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
         }
-        .fee-input {
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        h3 {
+            text-align: center;
+            color: black;
+            margin-bottom: 30px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .grid-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="number"] {
             width: 100%;
-            max-width: 50px;
-            /* Ajusta este valor según necesites */
-            font-family: monospace;
-            /* Opcional, para mejorar la visibilidad de direcciones largas */
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        input:read-only {
+            background-color: #e9ecef;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            border: none;
+            color: #fff;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        button:active {
+            background-color: #1e7e34;
+        }
+
+        .buttons {
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.85em;
+            color: #777;
         }
     </style>
 </head>
 
 <body>
+    <div class="container">
+        <h3>Datos del Acuerdo</h3>
 
-    <h3 class="titulo" id="titulo">DATOS DEL ACUERDO</h3>
+        <!-- Sección de datos -->
+        <div class="grid-container">
+            <div>
+                <label for="servicePayer">Wallet pagador servicio (empresa):</label>
+                <input type="text" id="servicePayer" placeholder="Wallet empresa" readonly>
+            </div>
+            <div>
+                <label for="serviceProvider">Wallet proveedor servicio (freelancer):</label>
+                <input type="text" id="serviceProvider" placeholder="Wallet freelancer" readonly>
+            </div>
+            <div>
+                <label for="arbitrator">Wallet árbitro:</label>
+                <input type="text" id="arbitrator" value="0x31e331E751e490ef39e8B269399a76f483b2b5Af" readonly>
+            </div>
+            <div>
+                <label for="startDate">Fecha inicio:</label>
+                <input type="date" id="startDate">
+            </div>
+            <div>
+                <label for="endDate">Fecha fin:</label>
+                <input type="date" id="endDate">
+            </div>
+            <div>
+                <label for="numHours">Nro. horas:</label>
+                <input type="number" id="numHours" min="0" step="1" value="40">
+            </div>
+            <div>
+                <label for="hourlyRate">Valor hora (USDC):</label>
+                <input type="number" id="hourlyRate" min="0" step="0.01" value="30" readonly>
+            </div>
+            <div>
+                <label for="agreementAmount">Monto acuerdo (USDC):</label>
+                <input type="text" id="agreementAmount" readonly value="1200">
+            </div>
+            <div>
+                <label for="arbitrateFee">Fee de arbitraje (USDC):</label>
+                <input type="text" id="arbitrateFee" readonly value="0.3">
+            </div>
+            <div>
+                <label for="daoFee">Fee DAO (USDC):</label>
+                <input type="text" id="daoFee" readonly value="0.5">
+            </div>
+        </div>
 
-    <!-- Campos adicionales -->
-    <label for="servicePayer">Wallet pagador servicio (empresa):</label>
-    <input type="text" id="servicePayer" placeholder="Wallet empresa" class="wallet-input"><br><br>
+        <!-- Botones -->
+        <div class="buttons">
+            <button id="connectWallet">Conectar wallet</button>
+            <button id="createAgreement">Crear acuerdo</button>
+        </div>
 
-    <label for="serviceProvider">Wallet proveedor servicio (freelancer):</label>
-    <input type="text" id="serviceProvider" placeholder="Wallet freelancer" class="wallet-input"><br><br>
+        <!-- Consultar acuerdo -->
+        <div class="grid-container">
+            <div>
+                <label for="agreementId">ID del Acuerdo:</label>
+                <input type="number" id="agreementId" min="0" step="1" placeholder="Ingresa ID del acuerdo">
+                <button id="getAgreement">Consultar acuerdo</button>
+                <button id="payAgreement">Pagar acuerdo</button>
+            </div>
+        </div>
 
-    <label for="arbitrator">Wallet árbitro:</label>
-    <input type="text" id="arbitrator" value="0x31e331E751e490ef39e8B269399a76f483b2b5Af" placeholder="Wallet árbitro"
-        class="wallet-input"><br><br>
+        <!-- Acciones en construcción -->
+        <div class="buttons" style="margin-top: 10px;">
+            <button id="disagreement">Desacuerdo</button>
+            <button id="agreement">Acuerdo</button>
+            <button id="resolveDisagreement">Resolver desacuerdo</button>
+        </div>
+    </div>
 
-    <label for="startDate">Fecha inicio:</label>
-    <input type="date" id="startDate"><br><br>
-
-    <label for="endDate">Fecha fin:</label>
-    <input type="date" id="endDate"><br><br>
-
-    <label for="numHours">Nro. horas:</label>
-    <input type="number" id="numHours" min="0" step="1" value="40"><br><br>
-
-    <label for="hourlyRate">Valor hora (USDC):</label>
-    <input type="number" id="hourlyRate" min="0" step="0.01" value="30" placeholder="USD $"><br><br>
-
-    <label for="agreementAmount">Monto acuerdo (USDC):</label>
-    <input type="text" id="agreementAmount" readonly placeholder="USD $" value="1200"><br><br>
-
-    <label for="agreementAmount">Fee de arbitraje (USDC):</label>
-    <input type="text" id="arbitrateFee" readonly placeholder="USD $" value="0.3" class="fee-input"><br><br>
-
-    <label for="agreementAmount">Fee DAO (USDC):</label>
-    <input type="text" id="daoFee" readonly placeholder="USD $" value="0.5" class="fee-input"><br><br>
-
-    <button id="connectWallet">Conectar wallet</button>
-    <button id="createAgreement">Crear acuerdo (SPA y SPR?)</button>
-
-    </br></br></br>
-
-    <!-- Campo de texto para ingresar el ID del acuerdo -->
-    <label for="agreementId">Id acuerdo:</label>
-    <input type="number" id="agreementId" min="0" step="1" placeholder="Ingresa ID del acuerdo" required
-        class="wallet-input"></br></br>
-    <button id="getAgreement">Consultar acuerdo</button>
-    <button id="payAgreement">Pagar acuerdo (WMC-Agreements-Payer)</button>
-
-    </br></br></br>
-
-    <button id="disagreement">Desacuerdo (SPA y SPR) ... En construcción</button></br></br>
-    <button id="agreement">Acuerdo (SPA y SPR) ... En construcción</button></br></br>
-    <button id="resolveDisagreement">Resolver desacuerdo (ARB) ... En construcción</button>
+    <footer>
+        &copy; 2025 - Interacción con contratos. Todos los derechos reservados.
+    </footer>
 
     <script src="ethers.umd.min.js"></script>
     <script src="wmc-front-script.js"></script>
     <script src="wmc-front-calculation.js"></script>
-
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        document.getElementById('servicePayer').value = params.get('servicePayer') || '';
+        document.getElementById('serviceProvider').value = params.get('serviceProvider') || '';
+        document.getElementById('arbitrator').value = params.get('arbitrator') || '0x31e331E751e490ef39e8B269399a76f483b2b5Af';
+        document.getElementById('startDate').value = params.get('startDate') || '';
+        document.getElementById('endDate').value = params.get('endDate') || '';
+        document.getElementById('numHours').value = params.get('numHours') || 40;
+        document.getElementById('hourlyRate').value = params.get('hourlyRate');
+        document.getElementById('agreementAmount').value = document.getElementById('numHours').value * document.getElementById('hourlyRate').value;
+        document.getElementById('arbitrateFee').value = params.get('arbitrateFee') || 0.3;
+        document.getElementById('daoFee').value = params.get('daoFee') || 0.5;
+        document.getElementById('agreementId').value = params.get('agreementId') || '';
+    </script>
 </body>
 
 </html>
