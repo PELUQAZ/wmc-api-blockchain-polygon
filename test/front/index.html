@@ -98,21 +98,21 @@
 
 <body>
     <div class="container">
-        <h3>Datos del Acuerdo</h3>
+        <h3>Información del acuerdo</h3>
 
         <!-- Sección de datos -->
         <div class="grid-container">
             <div>
-                <label for="servicePayer">Wallet pagador servicio (empresa):</label>
-                <input type="text" id="servicePayer" placeholder="Wallet empresa" readonly>
+                <label for="servicePayer">Wallet pagador servicio:</label>
+                <input type="text" id="servicePayer" placeholder="Wallet pagador" readonly>
             </div>
             <div>
-                <label for="serviceProvider">Wallet proveedor servicio (freelancer):</label>
-                <input type="text" id="serviceProvider" placeholder="Wallet freelancer" readonly>
+                <label for="serviceProvider">Wallet proveedor servicio:</label>
+                <input type="text" id="serviceProvider" placeholder="Wallet proveedor" readonly>
             </div>
             <div>
                 <label for="arbitrator">Wallet árbitro:</label>
-                <input type="text" id="arbitrator" value="0x31e331E751e490ef39e8B269399a76f483b2b5Af" readonly>
+                <input type="text" id="arbitrator" readonly>
             </div>
             <div>
                 <label for="startDate">Fecha inicio:</label>
@@ -124,39 +124,38 @@
             </div>
             <div>
                 <label for="numHours">Nro. horas:</label>
-                <input type="number" id="numHours" min="0" step="1" value="40">
+                <input type="number" id="numHours" min="1" step="1" value="1">
             </div>
             <div>
                 <label for="hourlyRate">Valor hora (USDC):</label>
-                <input type="number" id="hourlyRate" min="0" step="0.01" value="30" readonly>
+                <input type="number" id="hourlyRate" min="0" step="0.01">
             </div>
             <div>
                 <label for="agreementAmount">Monto acuerdo (USDC):</label>
-                <input type="text" id="agreementAmount" readonly value="1200">
+                <input type="text" id="agreementAmount" readonly>
             </div>
             <div>
-                <label for="arbitrateFee">Fee de arbitraje (USDC):</label>
-                <input type="text" id="arbitrateFee" readonly value="0.3">
+                <label for="arbitrateFee">Fee arbitraje: USDC $0.2</label>
             </div>
             <div>
-                <label for="daoFee">Fee DAO (USDC):</label>
-                <input type="text" id="daoFee" readonly value="0.5">
+                <label for="daoFee">Fee DAO: USDC $0.3</label>
             </div>
         </div>
 
         <!-- Botones -->
         <div class="buttons">
-            <button id="connectWallet">Conectar wallet</button>
+            <!--<button id="connectWallet">Conectar wallet</button>-->
+            <br>
             <button id="createAgreement">Crear acuerdo</button>
         </div>
 
         <!-- Consultar acuerdo -->
         <div class="grid-container">
             <div>
-                <label for="agreementId">ID del Acuerdo:</label>
+                <label for="agreementId">ID acuerdo:</label>
                 <input type="number" id="agreementId" min="0" step="1" placeholder="Ingresa ID del acuerdo">
                 <button id="getAgreement">Consultar acuerdo</button>
-                <button id="payAgreement">Pagar acuerdo</button>
+                <!--<button id="payAgreement">Pagar acuerdo</button>-->
             </div>
         </div>
 
@@ -175,20 +174,7 @@
     <script src="ethers.umd.min.js"></script>
     <script src="wmc-front-script.js"></script>
     <script src="wmc-front-calculation.js"></script>
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        document.getElementById('servicePayer').value = params.get('servicePayer') || '';
-        document.getElementById('serviceProvider').value = params.get('serviceProvider') || '';
-        document.getElementById('arbitrator').value = params.get('arbitrator') || '0x31e331E751e490ef39e8B269399a76f483b2b5Af';
-        document.getElementById('startDate').value = params.get('startDate') || '';
-        document.getElementById('endDate').value = params.get('endDate') || '';
-        document.getElementById('numHours').value = params.get('numHours') || 40;
-        document.getElementById('hourlyRate').value = params.get('hourlyRate');
-        document.getElementById('agreementAmount').value = document.getElementById('numHours').value * document.getElementById('hourlyRate').value;
-        document.getElementById('arbitrateFee').value = params.get('arbitrateFee') || 0.3;
-        document.getElementById('daoFee').value = params.get('daoFee') || 0.5;
-        document.getElementById('agreementId').value = params.get('agreementId') || '';
-    </script>
+
 </body>
 
 </html>

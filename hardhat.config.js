@@ -10,14 +10,15 @@ module.exports = {
   networks: {
     amoy: {
       url: process.env.NETWORK_URL,
-      //accounts: [process.env.PRIVATE_KEY],
+      accounts: [process.env.PRIVATE_KEY],
       gasPrice: "auto"
     }
   },
     // Script que se ejecuta después de cada compilación
     paths: {
     artifacts: "./artifacts",
-  }
+  },
+  include: ["./contracts/WMCAgreementManagement-v6.sol"], // 🔹 Solo compilará este contrato
 };
 
 // Tarea personalizada para copiar el ABI después de la compilación
@@ -25,7 +26,7 @@ task("post-compile", "Copia el ABI generado a la ruta de destino")
   .setAction(async () => {
     const sourceABIPath = path.join(
       __dirname,
-      "artifacts/contracts/WMCAgreementManagement-v3.sol/WMCAgreementManagement.json"
+      "artifacts/contracts/WMCAgreementManagement-v6.sol/WMCAgreementManagement.json"
     );
     const targetABIPath = path.join(
       __dirname,

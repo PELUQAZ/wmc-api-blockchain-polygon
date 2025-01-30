@@ -1,7 +1,7 @@
 {
   "_format": "hh-sol-artifact-1",
   "contractName": "IERC20",
-  "sourceName": "contracts/WMCServiceManagement-v2.sol",
+  "sourceName": "contracts/WMCAgreementManagement-v6.sol",
   "abi": [
     {
       "inputs": [
