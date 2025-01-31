@@ -76,7 +76,10 @@ async function loadData() {
         document.getElementById("serviceProvider").value = sprParamWallet;
 
         //Árbitro
-        nextArbiter = await contract.getNextArbiter();
+        //nextArbiter = await contract.getNextArbiter();
+        nextArbiter = contract.getNextArbiter()
+            .then(result => console.log("Árbitro obtenido: ", result))
+            .catch(error => console.error("Error en getNextArbiter: ", error));
         document.getElementById("arbitrator").value = nextArbiter;
 
     } catch (error) {
