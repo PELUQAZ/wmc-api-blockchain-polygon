@@ -34,7 +34,7 @@ async function loadConfig() {
         //const config = await response.json();
         //apiBaseUrl = baseUrl; //config.apiBaseUrl;
 
-        CONTRACT_ADDRESS = '0x40228886eF4e5a74377484F781337b2ADC9e71b2'; //'0xB69895569df53D1f66D11690a756c4ef1eC86188'; //'0xE2e2b4297c51bF174b656F064BA3cb82095A5399'; //config.contractAddress;
+        CONTRACT_ADDRESS = '0x18E470a2f2E45316E48e6e986AF60EC1c0aCc55B'; //'0x40228886eF4e5a74377484F781337b2ADC9e71b2';
         USDC_TOKEN_ADDRESS = '0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582'; //'0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359'; //config.usdcTokenAddress;
 
     } catch (error) {
@@ -76,10 +76,10 @@ async function loadData() {
         document.getElementById("serviceProvider").value = sprParamWallet;
 
         //Árbitro
-        //nextArbiter = await contract.getNextArbiter();
-        nextArbiter = contract.getNextArbiter()
-            .then(result => console.log("Árbitro obtenido: ", result))
-            .catch(error => console.error("Error en getNextArbiter: ", error));
+        nextArbiter = await contract.getNextArbiter();
+        //nextArbiter = contract.getNextArbiter()
+        //    .then(result => console.log("Árbitro obtenido: ", result))
+        //    .catch(error => console.error("Error en getNextArbiter: ", error));
         document.getElementById("arbitrator").value = nextArbiter;
 
     } catch (error) {
