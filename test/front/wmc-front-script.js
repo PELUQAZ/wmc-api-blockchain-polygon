@@ -34,7 +34,7 @@ async function loadConfig() {
         //const config = await response.json();
         //apiBaseUrl = baseUrl; //config.apiBaseUrl;
 
-        CONTRACT_ADDRESS = '0x18E470a2f2E45316E48e6e986AF60EC1c0aCc55B'; //'0x40228886eF4e5a74377484F781337b2ADC9e71b2';
+        CONTRACT_ADDRESS = '0x438dA3c7756a10Cf151E4Af055f8E1834d5f8eF5'; //'0x18E470a2f2E45316E48e6e986AF60EC1c0aCc55B';
         USDC_TOKEN_ADDRESS = '0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582'; //'0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359'; //config.usdcTokenAddress;
 
     } catch (error) {
