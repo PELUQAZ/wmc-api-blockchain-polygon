@@ -64,7 +64,7 @@ task("post-compile", "Copia el ABI generado a la ruta de destino")
 
     const sourceABIPath = path.join(
       __dirname,
-      "artifacts/contracts/WMCAgreementManagement-v6.sol/WMCAgreementManagement.json"
+      "artifacts/contracts/WMCAgreementManagement-v7.sol/WMCAgreementManagement.json"
     );
     const targetABIPath = path.join(
       __dirname,
