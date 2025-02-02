@@ -3,6 +3,7 @@ require("@nomiclabs/hardhat-ethers");
 require("dotenv").config();
 const fs = require("fs");
 const path = require("path");
+const { ethers } = require("ethers");
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -11,18 +12,22 @@ module.exports = {
     amoy: {
       url: process.env.NETWORK_URL,
       accounts: [process.env.PRIVATE_KEY],
-      gasPrice: "auto",  // Permite usar el gas estimado
-      gasPrice: 25000000000,  // 25 Gwei (ajústalo si sigue fallando)
-      maxFeePerGas: 30000000000, // 30 Gwei
-      maxPriorityFeePerGas: 25000000000 // 25 Gwei
+      gas: 6000000, //"auto"
+      gasPrice: 25000000000, //"auto" 25 Gwei (ajústalo si sigue fallando) - antes: "auto"
+      maxFeePerGas: 30000000000, // 30 Gwei (ajusta según necesidad)
+      maxPriorityFeePerGas: 25000000000, // 25 Gwei (ajusta según necesidad)
     }
   },
     // Script que se ejecuta después de cada compilación
-    paths: {
+  paths: {
     artifacts: "./artifacts",
   },
-  include: ["./contracts/WMCAgreementManagement-v6.sol"], // 🔹 Solo compilará este contrato
+  include: ["./contracts/WMCAgreementManagement-v7.sol"], // 🔹 Solo compilará este contrato
 };
+
+// Verificar si las variables de entorno están cargadas
+//console.log("RPC URL:", process.env.NETWORK_URL);
+//console.log("Private Key:", process.env.PRIVATE_KEY ? "Cargada ✅" : "No cargada ❌");
 
 // Tarea personalizada para copiar el ABI después de la compilación
 task("post-compile", "Copia el ABI generado a la ruta de destino")

@@ -52,6 +52,10 @@ contract WMCAgreementManagement {
         //...
     }
 
+    function helloWorld() public pure returns (string memory) {
+        return "Hola Mundo!";
+    }
+
     /// Consulta el array de acuerdos (agreements) y devuelve la wallet del siguiente árbitro que según el orden en validArbiters, se asignaría al siguiente acuerdo.
     /// La asignación de árbitros a los acuerdos debe hacerse uno a uno, en orden, es decir, al acuerdo 0 debe asignarse el 
     /// primer árbitro válido (o sea 0x31e331E751e490ef39e8B269399a76f483b2b5Af), al acuerdo 1 debe asignarse el segundo árbitro

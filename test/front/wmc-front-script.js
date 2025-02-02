@@ -52,6 +52,9 @@ async function loadData() {
     const contract = new ethers.Contract(CONTRACT_ADDRESS, contractABI, signer);
 
     try {
+        const testHello = await contract.helloWorld();
+        console.log("Prueba HelloWorld: ", testHello);        
+
         params = new URLSearchParams(window.location.search);
         //SPA
         const spaConnectedWallet = localStorage.getItem('userAddress');
