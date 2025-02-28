@@ -16,6 +16,14 @@ module.exports = {
       gasPrice: 25000000000, //"auto" 25 Gwei (ajústalo si sigue fallando) - antes: "auto"
       maxFeePerGas: 30000000000, // 30 Gwei (ajusta según necesidad)
       maxPriorityFeePerGas: 25000000000, // 25 Gwei (ajusta según necesidad)
+    },
+    polygon: {
+      url: process.env.POLYGON_NETWORK_URL || "https://polygon-mainnet.infura.io/",
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+      gas: 6000000, //"auto"
+      gasPrice: 25000000000, //"auto" 25 Gwei (ajústalo si sigue fallando) - antes: "auto"
+      maxFeePerGas: 30000000000, // 30 Gwei (ajusta según necesidad)
+      maxPriorityFeePerGas: 25000000000, // 25 Gwei (ajusta según necesidad)
     }
   },
     // Script que se ejecuta después de cada compilación

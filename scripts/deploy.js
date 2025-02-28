@@ -4,6 +4,9 @@ const path = require("path");
 
 async function main() {
     const contractsDir = path.join(__dirname, "../contracts");
+    
+    //const addressUsdcTokenAmoy = "0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582";
+    const addressUsdcTokenPolygon = "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359";
 
     // Buscar la versión más alta de WMCAgreementManagement-vX.sol
     const contractFiles = fs.readdirSync(contractsDir);
@@ -43,7 +46,7 @@ async function main() {
 
         // Estimar el gas antes de desplegar
         const estimatedGas = await ethers.provider.estimateGas(
-            WMC.getDeployTransaction("0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582")
+            WMC.getDeployTransaction(addressUsdcTokenPolygon)
         );
         console.log(`⛽ Gas estimado para el despliegue: ${estimatedGas.toString()}`);
 
@@ -52,7 +55,7 @@ async function main() {
         const gasLimit = 6000000; // Límite de gas razonable
         const gasPrice = ethers.utils.parseUnits("25", "gwei"); // 25 Gwei
 
-        const contract = await WMC.deploy("0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582", {
+        const contract = await WMC.deploy(addressUsdcTokenPolygon, {
             gasLimit: gasLimit, //estimatedGas.mul(2) + 100000,  // 🔹 Usamos el doble del gas estimado para evitar bloqueos
             gasPrice: gasPrice
         });
