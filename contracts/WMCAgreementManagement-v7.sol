@@ -14,8 +14,14 @@ interface IERC20 {
     function approve(address spender, uint256 amount) external returns (bool);
 }
 
+//interface IWMCWUNRewardDistributor {
+//    function rewardAgreement(address serviceProvider, address servicePayer) external;
+//}
+
 contract WMCAgreementManagement {
     IERC20 public usdcToken;
+    IERC20 public wunToken = IERC20(0x6aA78f6077647d90ef5E5F1d432F9C2B66FF0182); // Dirección del token WUN
+    //IWMCWUNRewardDistributor public rewardDistributor; // Referencia al contrato de recompensas WUN
 
     // Enum para representar el estado de arbitraje
     enum ArbitrationState { NoArbitration, Arbitration, ResolvedSPA, ResolvedSPR }
@@ -44,16 +50,19 @@ contract WMCAgreementManagement {
 
     /// @dev Constructor para inicializar el contrato.
     /// @param _usdcTokenAddress Dirección del token USDC.
-    constructor(address _usdcTokenAddress) {
+    /// param _rewardDistributorAddress Dirección del contrato de recompensas WUN.
+    constructor(address _usdcTokenAddress) { //, address _rewardDistributorAddress
         usdcToken = IERC20(_usdcTokenAddress);
+        //rewardDistributor = IWMCWUNRewardDistributor(_rewardDistributorAddress);
+
         validArbiters.push(0x31e331E751e490ef39e8B269399a76f483b2b5Af); //Árbitro 0: LVM
         validArbiters.push(0x3069EBaEcA68b5f5E113e0d4Fc3155Bd0Bf4926B); //Árbitro 1: JFM
         //validArbiters.push(0x6c83C41cc7226AFb36ee66814cAbb952c9E89EC7); //Árbitro 2: JV
         //...
     }
 
-    function helloWorld() public pure returns (string memory) {
-        return "Hola Mundo!";
+    function initWmc() public pure returns (string memory) {
+        return "Initializing WMC...";
     }
 
     /// Consulta el array de acuerdos (agreements) y devuelve la wallet del siguiente árbitro que según el orden en validArbiters, se asignaría al siguiente acuerdo.
@@ -268,6 +277,7 @@ contract WMCAgreementManagement {
         require(msg.sender == AGREEMENTS_PAYER, "Solo la wallet autorizada para Agreements Payer puede procesar y pagar acuerdos.");
         
         uint256 currentDate = normalizeToDay(block.timestamp);
+        uint256 rewardWUN = 5 * 10**18; //5000000 🔹 5 WUN con 18 decimales
 
         for (uint i = 0; i < agreementIds.length; i++) {
 
@@ -283,6 +293,15 @@ contract WMCAgreementManagement {
                 agreement.amount > 0 && currentDate >= agreement.endDate) {
                 usdcToken.transfer(agreement.serviceProvider, agreement.amount);
                 agreement.amount = 0; // Marca el acuerdo como pagado
+
+                //Transferir 5 WUN al Service Provider y 5 WUN al Service Payer
+                wunToken.transfer(agreement.serviceProvider, rewardWUN);
+                wunToken.transfer(agreement.servicePayer, rewardWUN);
+
+                //TO-DO: Implementar lógica para entragar recompensas tanto al service payercomo al service provider
+                //Llamar a la función rewardAgreement del contrato de recompensas WUN
+                //rewardDistributor.rewardAgreement(agreement.serviceProvider, agreement.servicePayer);
+                
             }
         }
     }

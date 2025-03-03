@@ -34,7 +34,7 @@ async function loadConfig() {
         //const config = await response.json();
         //apiBaseUrl = baseUrl; //config.apiBaseUrl;
 
-        CONTRACT_ADDRESS = '0xd5326DFE43e3A5e84D085b47C31b50A5641Fb341'; // '0x438dA3c7756a10Cf151E4Af055f8E1834d5f8eF5';
+        CONTRACT_ADDRESS = '0xc3bA5eeA6Fee5c4aCFB23c72e3c1A31Cb965096B';
         USDC_TOKEN_ADDRESS = '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359'; //'0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582'; //config.usdcTokenAddress;
 
     } catch (error) {
@@ -52,8 +52,8 @@ async function loadData() {
     const contract = new ethers.Contract(CONTRACT_ADDRESS, contractABI, signer);
 
     try {
-        const testHello = await contract.helloWorld();
-        console.log("Prueba HelloWorld: ", testHello);        
+        const initWmc = await contract.initWmc();
+        console.log("State: ", initWmc);        
 
         params = new URLSearchParams(window.location.search);
         //SPA
@@ -176,6 +176,8 @@ async function createAgreement() {
         return;
     }
 
+    showStaticCustomAlert("Procesando transacciones...");
+
     // Obtén los valores de los campos del formulario
     const serviceProvider = document.getElementById("serviceProvider").value;
     const servicePayer = document.getElementById("servicePayer").value;
@@ -230,9 +232,9 @@ async function createAgreement() {
         console.log("Estimación ok. Ejecutando transacción de aprobación...");
         // Ejecuta la transacción usando la estimación de gas
         const approveTx = await usdcContract.approve(CONTRACT_ADDRESS, onChainData.amount, {
-            gasLimit: approveGasEstimate.toNumber() + 100000, // Utiliza la estimación de gas
-            maxPriorityFeePerGas: ethers.utils.parseUnits("30", "gwei"), // Tarifa de prioridad mínima requerida
-            maxFeePerGas: ethers.utils.parseUnits("60", "gwei") // Tarifa máxima total de gas
+            gasLimit: approveGasEstimate.toNumber() + 250000, // Utiliza la estimación de gas
+            maxPriorityFeePerGas: ethers.utils.parseUnits("50", "gwei"), // Tarifa de prioridad mínima requerida
+            maxFeePerGas: ethers.utils.parseUnits("100", "gwei") // Tarifa máxima total de gas
         });
 
         console.log("Continua tx aprobación.");
@@ -280,7 +282,11 @@ async function createAgreement() {
         const event = receipt.events.find(e => e.event === "NewAgreementCreated");
         const acuerdo_id_sc = event ? event.args[0].toNumber() : null;
         console.log("Acuerdo creado con ID:", acuerdo_id_sc);
-        console.log("Tx newAgreement ejecutada con éxito. Hash de la tx: ", tx.hash);
+        const txHash = tx.hash;
+        console.log("Tx newAgreement ejecutada con éxito. Hash de la tx: ", txHash);
+
+        //alert("Acuerdo guardado con éxito! Transacción: ", tx.hash);
+        showCustomAlert("Acuerdo guardado (on-chain) con éxito. Tx: " + txHash);
 
         //Obtener todos los datos necesarios para guardar en tabla tx_acuerdos:
         //const servicio_id = parseInt(params.get('serviceId'), 10) || 0;
@@ -337,7 +343,7 @@ async function createAgreement() {
             address_sc: CONTRACT_ADDRESS,
             tipo_token: "USDC",
             acuerdo_id_sc: acuerdo_id_sc,
-            hash_tx: tx.hash,
+            hash_tx: txHash,
             id_pagador: idPagador,
             id_arbitro: idArbitro,
             id_proveedor: idProveedor
@@ -365,9 +371,7 @@ async function createAgreement() {
             }
 
             const responseData = await response.json(); // Leer la respuesta del servidor
-            console.log("Acuerdo guardado con éxito:", responseData);
-
-            alert("Acuerdo guardado con éxito: ", responseData);
+            console.log("Acuerdo guardado off-chain con éxito:", responseData);
 
         } catch (error) {
             console.error("Error al guardar el acuerdo en la base de datos:", error);
@@ -454,6 +458,24 @@ async function disagreement() {
         console.error("Error al pagar desacuerdo:", error);
     }
 }
+
+function showStaticCustomAlert(message) {
+    document.getElementById("customStaticAlertMessage").innerText = message;
+    document.getElementById("customStaticAlert").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+}
+
+function showCustomAlert(message) {
+    document.getElementById("customAlertMessage").innerText = message;
+    document.getElementById("customAlert").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+}
+
+/*function closeCustomAlert() {
+    document.getElementById("customStaticAlert").style.display = "none";
+    document.getElementById("customAlert").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+}*/
 
 // Carga la configuración y el ABI al inicio
 (async () => {

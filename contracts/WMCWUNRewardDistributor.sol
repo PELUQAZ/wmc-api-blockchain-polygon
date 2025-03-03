@@ -23,14 +23,15 @@ contract WMCWUNRewardDistributor {
     uint256 public constant MAX_CIRCULATING_TOKENS = MAX_TOKENS_GLOBAL - TOKENS_BURNED_OR_LOST; // Máximo de WUN en circulación (50 millones).
     uint256 public constant INITIAL_DISTRIBUTION = 10_000_000 * 10**18; // Tokens reservados para distribución inicial (10 millones).
     uint256 public registrationReward = 10_000 * 10**18; // Recompensa fija de 10,000 WUN por registro.
-    uint256 public rewardPercentage = 5; // Porcentaje (5%) del valor del acuerdo que se recompensa en WUN.
+    //uint256 public rewardPercentage = 5; // Porcentaje (5%) del valor del acuerdo que se recompensa en WUN.
+    uint256 public fixedWunReward = 1; // Cantidad de WUN a recompensar.
 
     mapping(address => bool) public registeredUsers; // Registro para evitar recompensar múltiples veces a la misma wallet por registro.
 
     // Eventos para monitorear las operaciones de distribución y actualizaciones de parámetros
     event TokensDistributed(address indexed user, uint256 amount, string reason);
     event RegistrationRewardUpdated(uint256 newReward);
-    event RewardPercentageUpdated(uint256 newPercentage);
+    //event RewardPercentageUpdated(uint256 newPercentage);
 
     // Modificador para restringir funciones al propietario del contrato
     modifier onlyOwner() {
@@ -62,24 +63,25 @@ contract WMCWUNRewardDistributor {
 
     /**
      * @dev Recompensa a ambas partes involucradas en la ejecución de un acuerdo con un porcentaje del valor del acuerdo.
-     * @param freelancer Dirección del proveedor de servicio (Service Provider - SPR o freelancer) que participa en el acuerdo.
-     * @param company Dirección del pagador del servicio (Service Payer - SPA o empresa) aque participa en el acuerdo.
-     * @param agreementValue Valor del acuerdo en USDT (o el token base equivalente).
+     * @param serviceProvider Dirección del proveedor de servicio (Service Provider - SPR o freelancer) que participa en el acuerdo.
+     * @param servicePayer Dirección del pagador del servicio (Service Payer - SPA o empresa) aque participa en el acuerdo.
+     * //param agreementValue Valor del acuerdo en USDT (o el token base equivalente).
      */
-    function rewardAgreement(address freelancer, address company, uint256 agreementValue) external onlyOwner {
-        uint256 reward = (agreementValue * rewardPercentage / 100) * 10**18; // Calcular recompensa
+    function rewardAgreement(address serviceProvider, address servicePayer) external onlyOwner {//, uint256 agreementValue
+        //uint256 reward = (agreementValue * rewardPercentage / 100) * 10**18; // Calcular recompensa
+        uint256 reward = fixedWunReward * 10**18; // Escalar recompensa fija a 18 decimales
 
         require(totalDistributed + (2 * reward) <= INITIAL_DISTRIBUTION, "Se ha superado el limite maximo de distribucion");
 
         // Transferir recompensa al SPR.
-        IERC20(tokenContract).transfer(freelancer, reward);
+        IERC20(tokenContract).transfer(serviceProvider, reward);
         // Transferir recompensa a la SPA.
-        IERC20(tokenContract).transfer(company, reward);
+        IERC20(tokenContract).transfer(servicePayer, reward);
 
         totalDistributed += 2 * reward;
 
-        emit TokensDistributed(freelancer, reward, "Agreement-SPR");
-        emit TokensDistributed(company, reward, "Agreement-SPA");
+        emit TokensDistributed(serviceProvider, reward, "Agreement-SPR");
+        emit TokensDistributed(servicePayer, reward, "Agreement-SPA");
     }
 
     /**
@@ -97,10 +99,10 @@ contract WMCWUNRewardDistributor {
      * @param newPercentage Nuevo porcentaje de recompensa por acuerdo.
      * - Ejemplo: Si `newPercentage = 3`, la recompensa será el 3% del valor del acuerdo.
      */
-    function updateRewardPercentage(uint256 newPercentage) external onlyOwner {
+    /*function updateRewardPercentage(uint256 newPercentage) external onlyOwner {
         rewardPercentage = newPercentage;
         emit RewardPercentageUpdated(newPercentage);
-    }
+    }*/
 
     /**
      * @dev Transferir todos los tokens restantes del contrato a la  wallet del propietario.

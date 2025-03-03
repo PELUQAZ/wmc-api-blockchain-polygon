@@ -127,18 +127,18 @@
                 <input type="number" id="numHours" min="1" step="1" value="1">
             </div>
             <div>
-                <label for="hourlyRate">Valor hora (USDC):</label>
-                <input type="number" id="hourlyRate" min="0" step="0.01">
+                <label for="hourlyRate">Valor hora (USD):</label>
+                <input type="number" id="hourlyRate" min="0" step="0.01" value="5" readonly>
             </div>
             <div>
-                <label for="agreementAmount">Monto acuerdo (USDC):</label>
+                <label for="agreementAmount">Monto acuerdo (USD):</label>
                 <input type="text" id="agreementAmount" readonly>
             </div>
             <div>
-                <label for="arbitrateFee">Fee arbitraje: USDC $0.2</label>
+                <label for="arbitrateFee">Fee arbitraje: USD $0.2</label>
             </div>
             <div>
-                <label for="daoFee">Fee DAO: USDC $0.3</label>
+                <label for="daoFee">Fee DAO: USD $0.3</label>
             </div>
         </div>
 
@@ -148,6 +148,8 @@
             <br>
             <button id="createAgreement">Crear acuerdo</button>
         </div>
+
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
         <!-- Consultar acuerdo -->
         <div class="grid-container">
@@ -159,6 +161,8 @@
             </div>
         </div>
 
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
         <!-- Acciones en construcción -->
         <div class="buttons" style="margin-top: 10px;">
             <button id="disagreement">Desacuerdo</button>
@@ -168,8 +172,57 @@
     </div>
 
     <footer>
-        &copy; 2025 - Interacción con contratos. Todos los derechos reservados.
+        &copy; 2025 - Interacción con acuerdos WMC. Todos los derechos reservados.
     </footer>
+
+    <div id="customStaticAlert" style="
+        display: none; 
+        position: fixed; 
+        top: 50%; 
+        left: 50%; 
+        transform: translate(-50%, -50%);
+        background: white; 
+        padding: 20px; 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+        text-align: center;
+        z-index: 1000;">
+        <p id="customStaticAlertMessage"></p>
+    </div>
+
+    <div id="customAlert" style="
+        display: none; 
+        position: fixed; 
+        top: 50%; 
+        left: 50%; 
+        transform: translate(-50%, -50%);
+        background: white; 
+        padding: 20px; 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+        text-align: center;
+        z-index: 1000;">
+        <p id="customAlertMessage"></p>
+        <!--<button onclick="closeCustomAlert()" style="
+            background-color: #28a745; 
+            color: white; 
+            border: none; 
+            padding: 8px 16px; 
+            border-radius: 4px; 
+            cursor: pointer;">
+            OK
+        </button>-->
+    </div>
+    <div id="overlay" style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        z-index: 999;">
+    </div>
 
     <script src="ethers.umd.min.js"></script>
     <script src="wmc-front-script.js"></script>
